@@ -1,0 +1,19 @@
+v 4
+file . "paridade.vhd" "50c75641f7e053cc589c5de26a4885daa7217ca7" "20250425185718.102":
+  entity paridade at 1( 0) + 0 on 25;
+  architecture a_paridade of paridade at 13( 200) + 0 on 26;
+file . "decoder.vhd" "8507a21718b7624955ef07825773aff8c56ec14a" "20250425183420.346":
+  entity decoder at 1( 0) + 0 on 21;
+  architecture a_decoder of decoder at 16( 281) + 0 on 22;
+file . "porta_tb.vhd" "f42056bcf9173abcc87973770b396f144796c4c7" "20250425180633.863":
+  entity porta_tb at 1( 0) + 0 on 13;
+  architecture a_porta_tb of porta_tb at 7( 69) + 0 on 14;
+file . "porta.vhd" "4e809f4e957ed06738f42c6b023f88e8dbda60fe" "20250425182031.684":
+  entity porta at 1( 0) + 0 on 15;
+  architecture a_porta of porta at 12( 179) + 0 on 16;
+file . "decoder_tb.vhd" "ab8a131c99681cf414ace2724331c52d209a6a5a" "20250425183512.845":
+  entity decoder_tb at 1( 0) + 0 on 23;
+  architecture a_decoder_tb of decoder_tb at 7( 71) + 0 on 24;
+file . "paridade_tb.vhd" "0879ea526e62a3a6e126d8fd60a1378e8b8b8930" "20250425185959.463":
+  entity paridade_tb at 1( 0) + 0 on 29;
+  architecture a_paridade_tb of paridade_tb at 7( 72) + 0 on 30;
