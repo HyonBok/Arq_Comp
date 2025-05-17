@@ -5,18 +5,24 @@ file . "ula_jean.vhd" "b9ed21e0bb1281c4f32aeb515026f77632b9b1a5" "20250516203354
 file . "soma_e_subtrai.vhd" "a4831a4903f6b03cfc802b3bdafd4e9427c5c416" "20250516191629.714":
   entity soma_e_subtrai at 1( 0) + 0 on 41;
   architecture a_soma_e_subtrai of soma_e_subtrai at 11( 222) + 1 on 42;
-file . "mux16.vhd" "7a9c0df8abe53000caba1469d14654207ccce62f" "20250516185531.683":
-  entity mux16 at 1( 0) + 0 on 27;
-  architecture a_mux16 of mux16 at 13( 251) + 0 on 28;
+file . "mux16.vhd" "3f2ef6c07965490170002f2fa1a2ff36205dd2ba" "20250517232940.216":
+  entity mux16 at 1( 0) + 0 on 91;
+  architecture a_mux16 of mux16 at 13( 289) + 0 on 92;
 file . "mux8.vhd" "1d0ce5b00d3596288e86e85450cad6a6f223b5ff" "20250509190712.472":
   entity mux8 at 1( 0) + 0 on 21;
   architecture a_mux8 of mux8 at 12( 234) + 0 on 22;
 file . "mux8_tb.vhd" "fc3b43a22f67691b73b62deb798a578c2c4934be" "20250509190712.519":
   entity mux8_tb at 1( 0) + 0 on 23;
   architecture a_mux8_tb of mux8_tb at 7( 68) + 0 on 24;
-file . "ula_tb.vhd" "ed405dda5518095b13102139efaa8e70522c4b79" "20250516193946.317":
-  entity ula_tb at 1( 0) + 0 on 53;
-  architecture a_ula_tb of ula_tb at 8( 93) + 0 on 54;
+file . "ula_tb.vhd" "361959d41409cda73f3c77073cca19cee58102ed" "20250517233458.656":
+  entity ula_tb at 1( 0) + 0 on 107;
+  architecture a_ula_tb of ula_tb at 8( 100) + 0 on 108;
 file . "ula_jean_tb.vhd" "93cabfc04135a6586ccc5e7c7231ead3627bf9f8" "20250516201924.368":
   entity ula_jean_tb at 1( 0) + 0 on 69;
   architecture a_ula_jean_tb of ula_jean_tb at 8( 139) + 0 on 70;
+file . "ula.vhd" "cc3ed06c57687305cb9e2d223e08f465112c213d" "20250517233458.638":
+  entity ula at 1( 0) + 0 on 105;
+  architecture a_ula of ula at 14( 324) + 0 on 106;
+file . "operacoes.vhd" "063893703bbaf48786926b18332b7839e3f1502c" "20250517232400.694":
+  entity operacoes at 1( 0) + 0 on 81;
+  architecture a_operacoes of operacoes at 12( 231) + 0 on 82;

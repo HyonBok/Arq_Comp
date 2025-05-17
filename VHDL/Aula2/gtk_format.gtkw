@@ -1,0 +1,26 @@
+[*]
+[*] GTKWave Analyzer v3.3.116 (w)1999-2023 BSI
+[*] Sat May 17 23:35:30 2025
+[*]
+[dumpfile] "/home/hyon/Arq_Comp/VHDL/Aula2/ula_tb.ghw"
+[dumpfile_mtime] "Sat May 17 23:34:58 2025"
+[dumpfile_size] 2340
+[savefile] "/home/hyon/Arq_Comp/VHDL/Aula2/gtk_format.gtkw"
+[timestart] 0
+[size] 1920 1080
+[pos] -266 -223
+*-23.395515 4520000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.ula_tb.
+[sst_width] 278
+[signals_width] 164
+[sst_expanded] 1
+[sst_vpaned_height] 361
+@22
+#{top.ula_tb.resultado[15:0]} top.ula_tb.resultado[15] top.ula_tb.resultado[14] top.ula_tb.resultado[13] top.ula_tb.resultado[12] top.ula_tb.resultado[11] top.ula_tb.resultado[10] top.ula_tb.resultado[9] top.ula_tb.resultado[8] top.ula_tb.resultado[7] top.ula_tb.resultado[6] top.ula_tb.resultado[5] top.ula_tb.resultado[4] top.ula_tb.resultado[3] top.ula_tb.resultado[2] top.ula_tb.resultado[1] top.ula_tb.resultado[0]
+#{top.ula_tb.ent1[15:0]} top.ula_tb.ent1[15] top.ula_tb.ent1[14] top.ula_tb.ent1[13] top.ula_tb.ent1[12] top.ula_tb.ent1[11] top.ula_tb.ent1[10] top.ula_tb.ent1[9] top.ula_tb.ent1[8] top.ula_tb.ent1[7] top.ula_tb.ent1[6] top.ula_tb.ent1[5] top.ula_tb.ent1[4] top.ula_tb.ent1[3] top.ula_tb.ent1[2] top.ula_tb.ent1[1] top.ula_tb.ent1[0]
+#{top.ula_tb.ent0[15:0]} top.ula_tb.ent0[15] top.ula_tb.ent0[14] top.ula_tb.ent0[13] top.ula_tb.ent0[12] top.ula_tb.ent0[11] top.ula_tb.ent0[10] top.ula_tb.ent0[9] top.ula_tb.ent0[8] top.ula_tb.ent0[7] top.ula_tb.ent0[6] top.ula_tb.ent0[5] top.ula_tb.ent0[4] top.ula_tb.ent0[3] top.ula_tb.ent0[2] top.ula_tb.ent0[1] top.ula_tb.ent0[0]
+@29
+#{top.ula_tb.selec[1:0]} top.ula_tb.selec[1] top.ula_tb.selec[0]
+[pattern_trace] 1
+[pattern_trace] 0

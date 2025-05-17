@@ -4,46 +4,53 @@ use IEEE.numeric_std.all;
 
 entity ula is
     port(
-        a0,a1:  in  unsigned(15 downto 0);
-        sel:  in  unsigned(1 downto 0);
-        saida:  out  unsigned(15 downto 0)
+        ent0,ent1:  in  unsigned(15 downto 0); -- Entradas
+        selec:  in  unsigned(1 downto 0);
+        resultado:  out  unsigned(15 downto 0);
+        z, n: out std_logic -- Carry e overflow
     );
 end entity;
 
 architecture a_ula of ula is
     component mux16 is
         port(
-            a0,a1,a2,a3: in  unsigned(15 downto 0);
-            sel: in  unsigned(1 downto 0);
-            saida: out unsigned(15 downto 0)
+            result0,result1,result2,result3: in  unsigned(15 downto 0);
+            selec: in  unsigned(1 downto 0);
+            resultado: out unsigned(15 downto 0)
         );
     end component;
 
-    component soma_e_subtrai is
+    component operacoes is
         port(
-            a0,a1       :  in  unsigned(15 downto 0);
-            soma,subt :  out unsigned(15 downto 0)
+            ent0,ent1: in  unsigned(15 downto 0);
+            soma,subt,op_e,op_ou: out unsigned(15 downto 0)
         );
     end component;
 
-    signal soma, subt, s2, s3: unsigned(15 downto 0);
+    signal soma, subt, op_e, op_ou, result: unsigned(15 downto 0);
 
 begin
-    soma_e_subt: soma_e_subtrai port map(
-        a0 => a0,
-        a1 => a1,
+    operacoes_0: operacoes port map(
+        ent0 => ent0,
+        ent1 => ent1,
         soma => soma,
-        subt => subt
+        subt => subt,
+        op_e => op_e,
+        op_ou => op_ou
     );
 
-    mux: mux16 port map(
-        a0 => soma,
-        a1 => subt,
-        a2 => s2,
-        a3 => s3,
-        sel => sel,
-        saida => saida
+    mux16_0: mux16 port map(
+        result0 => soma,
+        result1 => subt,
+        result2 => op_e,
+        result3 => op_ou,
+        selec => selec,
+        resultado => result
     );
+
+    resultado <= result;
+    z <= '1' when result = "0000000000000000" else '0';
+    n <= result(15);
 end architecture;
 
 
