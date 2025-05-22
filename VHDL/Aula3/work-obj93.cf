@@ -1,4 +1,7 @@
 v 4
+file . "banco_reg.vhd" "0474502f1b7613ef1931bbc5df64a9c65e20cb4b" "20250521235813.514":
+  entity banco_reg at 1( 0) + 0 on 111;
+  architecture a_banco_reg of banco_reg at 13( 323) + 0 on 112;
 file . "ula_jean.vhd" "b9ed21e0bb1281c4f32aeb515026f77632b9b1a5" "20250516203354.514":
   entity ula_jean at 1( 0) + 0 on 71;
   architecture a_ula_jean of ula_jean at 13( 323) + 0 on 72;
@@ -26,3 +29,6 @@ file . "ula.vhd" "cc3ed06c57687305cb9e2d223e08f465112c213d" "20250517233458.638"
 file . "operacoes.vhd" "063893703bbaf48786926b18332b7839e3f1502c" "20250517232400.694":
   entity operacoes at 1( 0) + 0 on 81;
   architecture a_operacoes of operacoes at 12( 231) + 0 on 82;
+file . "reg16bits.vhd" "16186872dbd62f1ad4f3039a335563ca23b4b66b" "20250521233036.059":
+  entity reg16bits at 1( 0) + 0 on 109;
+  architecture a_reg16bits of reg16bits at 12( 252) + 0 on 110;
