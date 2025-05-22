@@ -32,14 +32,14 @@ begin
     reg7: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en7, data_in=>entrada, data_out=>out_reg7);
 
     entrada <= data_wr;
-    wr_en0 <= '1' when reg_wr="00000" else '0';
-    wr_en1 <= '1' when reg_wr="00001" else '0';
-    wr_en2 <= '1' when reg_wr="00010" else '0';
-    wr_en3 <= '1' when reg_wr="00011" else '0';
-    wr_en4 <= '1' when reg_wr="00100" else '0';
-    wr_en5 <= '1' when reg_wr="00101" else '0';
-    wr_en6 <= '1' when reg_wr="00110" else '0';
-    wr_en7 <= '1' when reg_wr="00111" else '0';
+    wr_en0 <= '1' when reg_wr="00000" and wr_en='1' else '0';
+    wr_en1 <= '1' when reg_wr="00001" and wr_en='1' else '0';
+    wr_en2 <= '1' when reg_wr="00010" and wr_en='1' else '0';
+    wr_en3 <= '1' when reg_wr="00011" and wr_en='1' else '0';
+    wr_en4 <= '1' when reg_wr="00100" and wr_en='1' else '0';
+    wr_en5 <= '1' when reg_wr="00101" and wr_en='1' else '0';
+    wr_en6 <= '1' when reg_wr="00110" and wr_en='1' else '0';
+    wr_en7 <= '1' when reg_wr="00111" and wr_en='1' else '0';
 
 
     data_r1 <=  out_reg0 when reg_r1="00000" else
@@ -62,28 +62,4 @@ begin
                 out_reg7 when reg_r2="00111" else
                 "0000000000000000";
 
-    process(clk, rst, wr_en)
-    begin
-        if rst='1' then
-            wr_en0 <= '1';
-            wr_en1 <= '1';
-            wr_en2 <= '1';
-            wr_en3 <= '1';
-            wr_en4 <= '1';
-            wr_en5 <= '1';
-            wr_en6 <= '1';
-            wr_en7 <= '1';
-            entrada <= "0000000000000000";
-            
-        elsif wr_en='0' then
-            wr_en0 <= '0';
-            wr_en1 <= '0';
-            wr_en2 <= '0';
-            wr_en3 <= '0';
-            wr_en4 <= '0';
-            wr_en5 <= '0';
-            wr_en6 <= '0';
-            wr_en7 <= '0';
-        end if;
-    end process;
 end architecture;
