@@ -42,13 +42,6 @@ begin
         n => n
     );
 
-    reset_global: process
-    begin
-        reset <= '1';
-        wait for period_time*2; 
-        reset <= '0';
-        wait;
-    end process;
     
     sim_time_proc: process
     begin
@@ -99,31 +92,32 @@ begin
         sel_operacao <= "00";   --define como soma
         sel_write <= '1';       --entrada do banco definida como ula
         reg_wr <= "00011";      --registrador a escrever R3
-        reg_r1 <= "00001";
-        reg_r2 <= "00010";
+        reg_r1 <= "00001";      --entrada da ula R1 (3)
+        reg_r2 <= "00010";      --entrada na ula R2 (7)
         data_wr <= "0000000000000111";
 
-        --soma na ula oque tem no R1 mais R3
+        --na ula faz a operação  R1 ou R3
         wait for 100 ns;
         wr_en <= '0';           --desabilita a escrita
-        reset <= '0';
-        sel_operacao <= "00";   --define como soma
+        reset <= '0';       
+        sel_operacao <= "11";   --define como ou
         sel_write <= '0';       
         reg_wr <= "00001";      
         reg_r1 <= "00001";      --entrada 1 da ula R1
         reg_r2 <= "00011";      --entrada 2 da ula R3
         data_wr <= "0000000000000111";
 
-        --reseta o banco
+        --reseta o banco e soma R1 mais R2 na ula 
         wait for 100 ns;
         wr_en <= '0';           --desabilita a escrita
         reset <= '1';           
         sel_operacao <= "00";   --define como soma
         sel_write <= '0';       
         reg_wr <= "00001";      
-        reg_r1 <= "00001";
-        reg_r2 <= "00011";
+        reg_r1 <= "00001";      
+        reg_r2 <= "00010";
         data_wr <= "0000000000000111";
+
 
         wait;                
     end process;
