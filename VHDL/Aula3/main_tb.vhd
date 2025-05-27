@@ -63,6 +63,7 @@ begin
 
     process                     
     begin
+        reset <= '1';          --reset inicial
         --escreve 7 no R1 
         wait for 200 ns;
         wr_en <= '1';
