@@ -12,7 +12,6 @@ architecture a_main_tb of main_tb is
     end component;
 
     signal clk, reset : std_logic;
-    signal data_out : unsigned(13 downto 0);
 
     constant period_time : time      := 50 ns;
     signal   finished    : std_logic := '0';

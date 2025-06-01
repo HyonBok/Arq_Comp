@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity banco_reg is 
     port(   clk, rst, wr_en : in std_logic;
-            reg_wr, reg_r1, reg_r2  : in unsigned(4 downto 0);
+            reg_wr, reg_r1, reg_r2  : in unsigned(2 downto 0);
             data_wr : in unsigned(15 downto 0);
             data_r1, data_r2 : out unsigned(15 downto 0)
     );
@@ -32,34 +32,34 @@ begin
     reg7: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en7, data_in=>entrada, data_out=>out_reg7);
 
     entrada <= data_wr;
-    wr_en0 <= '1' when reg_wr="00000" and wr_en='1' else '0';
-    wr_en1 <= '1' when reg_wr="00001" and wr_en='1' else '0';
-    wr_en2 <= '1' when reg_wr="00010" and wr_en='1' else '0';
-    wr_en3 <= '1' when reg_wr="00011" and wr_en='1' else '0';
-    wr_en4 <= '1' when reg_wr="00100" and wr_en='1' else '0';
-    wr_en5 <= '1' when reg_wr="00101" and wr_en='1' else '0';
-    wr_en6 <= '1' when reg_wr="00110" and wr_en='1' else '0';
-    wr_en7 <= '1' when reg_wr="00111" and wr_en='1' else '0';
+    wr_en0 <= '1' when reg_wr="000" and wr_en='1' else '0';
+    wr_en1 <= '1' when reg_wr="001" and wr_en='1' else '0';
+    wr_en2 <= '1' when reg_wr="010" and wr_en='1' else '0';
+    wr_en3 <= '1' when reg_wr="011" and wr_en='1' else '0';
+    wr_en4 <= '1' when reg_wr="100" and wr_en='1' else '0';
+    wr_en5 <= '1' when reg_wr="101" and wr_en='1' else '0';
+    wr_en6 <= '1' when reg_wr="110" and wr_en='1' else '0';
+    wr_en7 <= '1' when reg_wr="111" and wr_en='1' else '0';
 
 
-    data_r1 <=  out_reg0 when reg_r1="00000" else
-                out_reg1 when reg_r1="00001" else
-                out_reg2 when reg_r1="00010" else
-                out_reg3 when reg_r1="00011" else
-                out_reg4 when reg_r1="00100" else
-                out_reg5 when reg_r1="00101" else
-                out_reg6 when reg_r1="00110" else
-                out_reg7 when reg_r1="00111" else
+    data_r1 <=  out_reg0 when reg_r1="000" else
+                out_reg1 when reg_r1="001" else
+                out_reg2 when reg_r1="010" else
+                out_reg3 when reg_r1="011" else
+                out_reg4 when reg_r1="100" else
+                out_reg5 when reg_r1="101" else
+                out_reg6 when reg_r1="110" else
+                out_reg7 when reg_r1="111" else
                 "0000000000000000";
-    
-    data_r2 <=  out_reg0 when reg_r2="00000" else
-                out_reg1 when reg_r2="00001" else
-                out_reg2 when reg_r2="00010" else
-                out_reg3 when reg_r2="00011" else
-                out_reg4 when reg_r2="00100" else
-                out_reg5 when reg_r2="00101" else
-                out_reg6 when reg_r2="00110" else
-                out_reg7 when reg_r2="00111" else
+
+    data_r2 <=  out_reg0 when reg_r2="000" else
+                out_reg1 when reg_r2="001" else
+                out_reg2 when reg_r2="010" else
+                out_reg3 when reg_r2="011" else
+                out_reg4 when reg_r2="100" else
+                out_reg5 when reg_r2="101" else
+                out_reg6 when reg_r2="110" else
+                out_reg7 when reg_r2="111" else
                 "0000000000000000";
 
 end architecture;

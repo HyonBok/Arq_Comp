@@ -8,7 +8,7 @@ entity state_machine is
    );
 end entity;
 architecture a_state_machine of state_machine is
-   signal estado_s: unsigned(1 downto 0);
+   signal estado_s: unsigned(1 downto 0) := "00";
 begin
    process(clk,rst)
    begin

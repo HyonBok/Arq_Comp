@@ -10,7 +10,7 @@ end entity;
 architecture a_main of main is 
  
     component rom is
-        port(   clk, mem_read  : in std_logic;
+        port(   clk  : in std_logic;
                 endereco : in unsigned(6 downto 0);
                 dado     : out unsigned(13 downto 0)    
         );
@@ -25,9 +25,11 @@ architecture a_main of main is
 
     component un_controle is 
         port(   clk, rst: in std_logic;
-                instrucao : in unsigned(13 downto 0);
-                pc_en, jump_en, jump_mem: out std_logic
-        );
+            instrucao : in unsigned(13 downto 0);
+            pc_en, fetch_en, reg_en, mux_pc, mux_ula: out std_logic;
+            sel_op_ula: out unsigned(1 downto 0);
+            const: out unsigned(15 downto 0)
+    );  
     end component;
 
     component ula is 
@@ -40,7 +42,7 @@ architecture a_main of main is
 
     component banco_reg is 
         port(   clk, rst, wr_en : in std_logic;
-                reg_wr, reg_r1, reg_r2  : in unsigned(4 downto 0);
+                reg_wr, reg_r1, reg_r2  : in unsigned(2 downto 0);
                 data_wr : in unsigned(15 downto 0);
                 data_r1, data_r2 : out unsigned(15 downto 0)
         );
@@ -54,41 +56,70 @@ architecture a_main of main is
     end component;
 
     
-    signal pc_enable, pc_mux, jump_mem, z, n : std_logic;
+    signal pc_en_s, fetch_en_s, reg_en_s, mux_pc_s, mux_ula_s, z, n : std_logic;
     signal saida_pc, new_address : unsigned(6 downto 0);
     signal saida_rom, saida_fetch : unsigned(13 downto 0);
-    signal saida_banco1, saida_banco2, saida_ula : unsigned(15 downto 0);
-    signal sel_operacao : unsigned(1 downto 0);
+    signal saida_banco1, saida_banco2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
+    signal sel_reg1, sel_reg2, sel_reg_wr : unsigned(2 downto 0);
+    signal sel_op_ula : unsigned(1 downto 0);
 
 begin
     pc1 : pc port map(
-        clk=>clk, rst=>reset, pc_mux=>pc_mux, pc_en=>pc_enable,
-        data_in=>new_address, data_out=>saida_pc
+        clk=>clk, 
+        rst=>reset, 
+        pc_mux=>mux_pc_s, 
+        pc_en=>pc_en_s,
+        data_in=>new_address, 
+        data_out=>saida_pc
     );   
     rom1 : rom port map(
-        clk=>clk, endereco=>saida_pc, mem_read=>memory_read,
+        clk=>clk, 
+        endereco=>saida_pc, 
         dado=>saida_rom
     );
     controle : un_controle port map(
-        clk=>clk, rst=>reset, instrucao=>saida_fetch,
-        pc_en=>pc_enable, jump_en=>pc_mux, jump_mem=>jump_mem
+        clk=>clk, 
+        rst=>reset, 
+        instrucao=>saida_fetch,
+        pc_en=>pc_en_s, 
+        fetch_en=>fetch_en_s, 
+        reg_en=>reg_en_s,
+        mux_pc=>mux_pc_s, 
+        mux_ula=>mux_ula_s, 
+        sel_op_ula=>sel_op_ula, 
+        const=>const_s
     );
     fetch: reg14bits port map(
-        clk=>clk, rst=>reset, wr_en=>pc_enable,
-        data_in=>saida_rom, data_out=>saida_fetch
+        clk=>clk, rst=>reset, 
+        wr_en=>fetch_en_s,
+        data_in=>saida_rom, 
+        data_out=>saida_fetch
     );
     ula1 : ula port map(
-        a0=>saida_banco1, a1=>saida_banco2, 
-        selec=>sel_operacao, resultado=>saida_ula, 
+        a0=>saida_banco1, 
+        a1=>entrada_ula2, 
+        selec=>sel_op_ula, 
+        resultado=>saida_ula, 
         z=>z, n=>n
     );
     banco : banco_reg port map(
-        clk=>clk, rst=>reset, wr_en=>/**/,
-        reg_wr=>saida_fetch(2 downto 0), 
-        reg_r1=>saida_fetch(5 downto 3), reg_r2=>saida_fetch(8 downto 6),
-        data_wr=>entrada_escrita, 
-        data_r1=>saida_banco1, data_r2=>saida_banco2
+        clk=>clk, 
+        rst=>reset, 
+        wr_en=>reg_en_s,
+        reg_wr=>sel_reg_wr,
+        reg_r1=>sel_reg1,
+        reg_r2=>sel_reg2,
+        data_wr=>saida_ula, 
+        data_r1=>saida_banco1, 
+        data_r2=>saida_banco2
     );
+
+    sel_reg_wr <= saida_fetch(9 downto 7);
+    sel_reg1 <= saida_fetch(6 downto 4);
+    sel_reg2 <= saida_fetch(3 downto 1);
+
+    entrada_ula2 <= saida_banco2 when mux_ula_s = '0' else
+                    const_s;
 
     new_address <= saida_fetch(6 downto 0);
 end architecture;
