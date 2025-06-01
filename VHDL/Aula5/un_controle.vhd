@@ -47,7 +47,7 @@ begin
     pc_en <= '1' when estado_s = "00" else
                 '0';
 
-    fetch_en <= '1' when estado_s = "01" else
+    fetch_en <= '1' when estado_s = "00" else
                 '0';
 
     reg_en <= '1' when estado_s = "10" and opcode /= "1111" else

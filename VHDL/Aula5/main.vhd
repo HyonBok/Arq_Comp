@@ -62,6 +62,7 @@ architecture a_main of main is
     signal saida_banco1, saida_banco2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
     signal sel_reg1, sel_reg2, sel_reg_wr : unsigned(2 downto 0);
     signal sel_op_ula : unsigned(1 downto 0);
+    signal clk_inv : std_logic;
 
 begin
     pc1 : pc port map(
@@ -90,7 +91,7 @@ begin
         const=>const_s
     );
     fetch: reg14bits port map(
-        clk=>clk, rst=>reset, 
+        clk=> clk_inv, rst=>reset, 
         wr_en=>fetch_en_s,
         data_in=>saida_rom, 
         data_out=>saida_fetch
@@ -113,6 +114,8 @@ begin
         data_r1=>saida_banco1, 
         data_r2=>saida_banco2
     );
+
+    clk_inv <= not clk;
 
     sel_reg_wr <= saida_fetch(9 downto 7);
     sel_reg1 <= saida_fetch(6 downto 4);
