@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity pc is 
-    port(   clk, rst, wr_en, pc_en  : in std_logic;
+    port(   clk, rst, pc_mux, pc_en  : in std_logic;
             data_in  : in unsigned(6 downto 0);
             data_out : out unsigned(6 downto 0)
     );
@@ -15,7 +15,7 @@ architecture a_pc of pc is
     signal registro, saida_somador: unsigned(6 downto 0) := "0000000";
 begin
 
-    entrada_pc <=   data_in when wr_en='1' else 
+    entrada_pc <=   data_in when pc_mux='1' else 
                     saida_somador;
 
     process(clk, rst, pc_en)

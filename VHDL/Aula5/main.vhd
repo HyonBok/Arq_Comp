@@ -17,7 +17,7 @@ architecture a_main of main is
     end component;
 
     component pc is
-        port(   clk, rst, wr_en, pc_en  : in std_logic;
+        port(   clk, rst, pc_mux, pc_en  : in std_logic;
                 data_in  : in unsigned(6 downto 0);
                 data_out : out unsigned(6 downto 0)
         );
@@ -26,7 +26,7 @@ architecture a_main of main is
     component un_controle is 
         port(   clk, rst: in std_logic;
                 instrucao : in unsigned(13 downto 0);
-                pc_en, jump_en, mem_read: out std_logic
+                pc_en, jump_en, jump_mem: out std_logic
         );
     end component;
 
@@ -53,8 +53,8 @@ architecture a_main of main is
         );
     end component;
 
-
-    signal pc_enable, pc_write, memory_read, z, n : std_logic;
+    
+    signal pc_enable, pc_mux, jump_mem, z, n : std_logic;
     signal saida_pc, new_address : unsigned(6 downto 0);
     signal saida_rom, saida_fetch : unsigned(13 downto 0);
     signal saida_banco1, saida_banco2, saida_ula : unsigned(15 downto 0);
@@ -62,7 +62,7 @@ architecture a_main of main is
 
 begin
     pc1 : pc port map(
-        clk=>clk, rst=>reset, wr_en=>pc_write, pc_en=>pc_enable,
+        clk=>clk, rst=>reset, pc_mux=>pc_mux, pc_en=>pc_enable,
         data_in=>new_address, data_out=>saida_pc
     );   
     rom1 : rom port map(
@@ -71,9 +71,9 @@ begin
     );
     controle : un_controle port map(
         clk=>clk, rst=>reset, instrucao=>saida_fetch,
-        pc_en=>pc_enable, jump_en=>pc_write, mem_read=>memory_read
+        pc_en=>pc_enable, jump_en=>pc_mux, jump_mem=>jump_mem
     );
-    reg14: reg14bits port map(
+    fetch: reg14bits port map(
         clk=>clk, rst=>reset, wr_en=>pc_enable,
         data_in=>saida_rom, data_out=>saida_fetch
     );
