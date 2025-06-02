@@ -1,0 +1,9 @@
+1-  LI R3, 5
+2-  LI R4, 8
+3-  ADD R5, R4, R3
+4-  SUBI R5, 1
+5-  JMP 20
+6-  LI R5, 0
+20- ADDI R3, R5, 0
+21- JMP 3
+22- LI R3, 0
