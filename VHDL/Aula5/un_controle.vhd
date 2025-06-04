@@ -23,6 +23,7 @@ architecture a_un_controle of un_controle is
     signal const_i, const_load : unsigned(15 downto 0);
     signal estado_s : unsigned(1 downto 0);
     signal opcode : unsigned(3 downto 0);
+    signal nop : unsigned(7 downto 0);
     signal rst_s : std_logic := '0';
 
 begin
@@ -30,6 +31,7 @@ begin
         clk=>clk, rst=>rst_s, estado=>estado_s
     );
 
+    -- 0000 0000 NOP
     -- 1111 JMP
     -- ULA:
     -- 0000 ADD
@@ -44,19 +46,22 @@ begin
 
     opcode <= instrucao(13 downto 10);
 
+    nop <= instrucao(13 downto 6);
+
     pc_en <= '1' when estado_s = "00" else
                 '0';
 
-    fetch_en <= '1' when estado_s = "01" else
+    fetch_en <= '1' when estado_s = "00" else
                 '0';
 
     reg_en <= '1' when estado_s = "10" and opcode /= "1111" else
                 '0';
-                
+    
+    -- Escolhe entre o endereço do jump (const) ou não
     mux_pc <= '1' when opcode = "1111" else
                 '0';
 
-    rst_s <= '1' when opcode = "1111" else
+    rst_s <= '1' when opcode = "1111" or nop = "00000000" else
                 '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" else -- Soma

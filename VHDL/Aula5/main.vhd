@@ -56,7 +56,7 @@ architecture a_main of main is
     end component;
 
     
-    signal pc_en_s, fetch_en_s, reg_en_s, mux_pc_s, mux_ula_s, z, n : std_logic;
+    signal pc_en_s, fetch_en_s, reg_en_s, mux_pc_s, mux_ula_s, z, n, clk_inv : std_logic;
     signal saida_pc, new_address : unsigned(6 downto 0);
     signal saida_rom, saida_fetch : unsigned(13 downto 0);
     signal saida_banco1, saida_banco2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
@@ -90,7 +90,7 @@ begin
         const=>const_s
     );
     fetch: reg14bits port map(
-        clk=>clk, rst=>reset, 
+        clk=>clk_inv, rst=>reset, 
         wr_en=>fetch_en_s,
         data_in=>saida_rom, 
         data_out=>saida_fetch
@@ -113,6 +113,8 @@ begin
         data_r1=>saida_banco1, 
         data_r2=>saida_banco2
     );
+
+    clk_inv <= not clk;
 
     sel_reg_wr <= saida_fetch(9 downto 7);
     sel_reg1 <= saida_fetch(6 downto 4);
