@@ -28,7 +28,8 @@ architecture a_main of main is
             instrucao : in unsigned(13 downto 0);
             pc_en, fetch_en, reg_en, mux_pc, mux_ula: out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
-            const: out unsigned(15 downto 0)
+            const: out unsigned(15 downto 0);
+            estado: out unsigned(1 downto 0)
     );  
     end component;
 
@@ -56,13 +57,14 @@ architecture a_main of main is
     end component;
 
     
-    signal pc_en_s, fetch_en_s, reg_en_s, mux_pc_s, mux_ula_s, z, n : std_logic;
+    signal pc_en_s, fetch_en_s, reg_en_s, mux_pc_s, mux_ula_s, z, n, clk_inv : std_logic;
     signal saida_pc, new_address : unsigned(6 downto 0);
-    signal saida_rom, saida_fetch : unsigned(13 downto 0);
-    signal saida_banco1, saida_banco2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
+    signal saida_rom, instrucao : unsigned(13 downto 0);
+    signal reg1, reg2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
     signal sel_reg1, sel_reg2, sel_reg_wr : unsigned(2 downto 0);
     signal sel_op_ula : unsigned(1 downto 0);
-    signal clk_inv : std_logic;
+
+    signal estado: unsigned(1 downto 0);
 
 begin
     pc1 : pc port map(
@@ -81,23 +83,24 @@ begin
     controle : un_controle port map(
         clk=>clk, 
         rst=>reset, 
-        instrucao=>saida_fetch,
+        instrucao=>instrucao,
         pc_en=>pc_en_s, 
         fetch_en=>fetch_en_s, 
         reg_en=>reg_en_s,
         mux_pc=>mux_pc_s, 
         mux_ula=>mux_ula_s, 
         sel_op_ula=>sel_op_ula, 
-        const=>const_s
+        const=>const_s,
+        estado=>estado
     );
     fetch: reg14bits port map(
         clk=> clk_inv, rst=>reset, 
         wr_en=>fetch_en_s,
         data_in=>saida_rom, 
-        data_out=>saida_fetch
+        data_out=>instrucao
     );
     ula1 : ula port map(
-        a0=>saida_banco1, 
+        a0=>reg1, 
         a1=>entrada_ula2, 
         selec=>sel_op_ula, 
         resultado=>saida_ula, 
@@ -111,19 +114,19 @@ begin
         reg_r1=>sel_reg1,
         reg_r2=>sel_reg2,
         data_wr=>saida_ula, 
-        data_r1=>saida_banco1, 
-        data_r2=>saida_banco2
+        data_r1=>reg1, 
+        data_r2=>reg2
     );
 
     clk_inv <= not clk;
 
-    sel_reg_wr <= saida_fetch(9 downto 7);
-    sel_reg1 <= saida_fetch(6 downto 4);
-    sel_reg2 <= saida_fetch(3 downto 1);
+    sel_reg_wr <= instrucao(9 downto 7);
+    sel_reg1 <= instrucao(6 downto 4);
+    sel_reg2 <= instrucao(3 downto 1);
 
-    entrada_ula2 <= saida_banco2 when mux_ula_s = '0' else
+    entrada_ula2 <= reg2 when mux_ula_s = '0' else
                     const_s;
 
-    new_address <= saida_fetch(6 downto 0);
+    new_address <= instrucao(6 downto 0);
 end architecture;
 
