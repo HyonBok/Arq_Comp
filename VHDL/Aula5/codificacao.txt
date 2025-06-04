@@ -1,0 +1,21 @@
+(Instruções ortogonais)
+MSB   b15               b0 LSB
+        |               |
+ADD:    0000 ddd sss rrrx
+SUB:    0001 ddd sss rrrx
+AND:    0010 ddd sss rrrx
+OR:     0011 ddd sss rrrx
+ADDI:   0100 ddd sss cccc
+SUBI:   0101 ddd sss cccc
+LI:     1100 ddd bbbbbbb
+JMP:    1111 xxx aaaaaaa
+
+onde:
+opcode  = primeiros 4 bits
+ddd     = identifica o registrador destino
+sss     = identifica o registrador fonte 1
+rrr     = identifica o registrador fonte 2
+cccc    = identifica a constante de 4 bits em complemento de 2
+bbbbbbb = identifica a constante de 7 bits em complemento de 2 à ser carregada
+aaaaaaa = identifica o endereco de 7 bits para salto
+x       = é irrelevante
