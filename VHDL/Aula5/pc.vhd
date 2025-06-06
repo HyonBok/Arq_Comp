@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity pc is 
-    port(   clk, rst, pc_mux, pc_en  : in std_logic;
+    port(   clk, reset, pc_mux, pc_en  : in std_logic;
             data_in  : in unsigned(6 downto 0);
             data_out : out unsigned(6 downto 0)
     );
@@ -18,9 +18,9 @@ begin
     entrada_pc <=   data_in when pc_mux='1' else 
                     registro + 1;
 
-    process(clk, rst, pc_en)
+    process(clk, reset, pc_en)
     begin
-        if rst='1' then
+        if reset='1' then
             registro <= "0000000";
         elsif pc_en='1' then
             if rising_edge(clk) then

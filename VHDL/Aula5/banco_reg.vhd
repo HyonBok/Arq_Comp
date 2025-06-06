@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity banco_reg is 
-    port(   clk, rst, wr_en : in std_logic;
+    port(   clk, reset, wr_en : in std_logic;
             reg_wr, reg_r1, reg_r2  : in unsigned(2 downto 0);
             data_wr : in unsigned(15 downto 0);
             data_r1, data_r2 : out unsigned(15 downto 0)
@@ -12,7 +12,7 @@ end entity;
 
 architecture a_banco_reg of banco_reg is 
     component reg16bits is
-        port(   clk, rst, wr_en : in std_logic;
+        port(   clk, reset, wr_en : in std_logic;
                 data_in : in unsigned(15 downto 0);
                 data_out : out unsigned(15 downto 0)
         );
@@ -22,14 +22,14 @@ architecture a_banco_reg of banco_reg is
     signal entrada : unsigned(15 downto 0);
 
 begin
-    reg0: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en0, data_in=>entrada, data_out=>out_reg0);
-    reg1: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en1, data_in=>entrada, data_out=>out_reg1);
-    reg2: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en2, data_in=>entrada, data_out=>out_reg2);
-    reg3: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en3, data_in=>entrada, data_out=>out_reg3);
-    reg4: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en4, data_in=>entrada, data_out=>out_reg4);
-    reg5: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en5, data_in=>entrada, data_out=>out_reg5);
-    reg6: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en6, data_in=>entrada, data_out=>out_reg6);
-    reg7: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en7, data_in=>entrada, data_out=>out_reg7);
+    reg0: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en0, data_in=>entrada, data_out=>out_reg0);
+    reg1: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en1, data_in=>entrada, data_out=>out_reg1);
+    reg2: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en2, data_in=>entrada, data_out=>out_reg2);
+    reg3: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en3, data_in=>entrada, data_out=>out_reg3);
+    reg4: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en4, data_in=>entrada, data_out=>out_reg4);
+    reg5: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en5, data_in=>entrada, data_out=>out_reg5);
+    reg6: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en6, data_in=>entrada, data_out=>out_reg6);
+    reg7: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en7, data_in=>entrada, data_out=>out_reg7);
 
     entrada <= data_wr;
     wr_en0 <= '1' when reg_wr="000" and wr_en='1' else '0';
