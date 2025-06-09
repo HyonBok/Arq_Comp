@@ -2,11 +2,11 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity main_tb is 
+entity processador_tb is 
 end;
 
-architecture a_main_tb of main_tb is 
-    component main 
+architecture a_processador_tb of processador_tb is 
+    component processador 
         port(   clk, reset : in std_logic
     );
     end component;
@@ -17,7 +17,7 @@ architecture a_main_tb of main_tb is
     signal   finished    : std_logic := '0';
 
 begin 
-    uut : main port map (
+    uut : processador port map (
         clk => clk,
         reset => reset
     );

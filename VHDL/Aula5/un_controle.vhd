@@ -3,9 +3,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity un_controle is 
-    port(   clk, rst: in std_logic;
+    port(   clk, reset: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, reg_en, mux_pc, mux_ula: out std_logic;
+            pc_en, fetch_en, wr_reg_en, mux_pc, mux_ula: out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(1 downto 0)
@@ -16,7 +16,7 @@ end entity;
 architecture a_un_controle of un_controle is
 
     component state_machine is 
-    port(   clk, rst : in std_logic;
+    port(   clk, reset : in std_logic;
             estado : out unsigned(1 downto 0)
     );
     end component;
@@ -25,11 +25,11 @@ architecture a_un_controle of un_controle is
     signal estado_s : unsigned(1 downto 0);
     signal opcode : unsigned(3 downto 0);
     signal nop : unsigned(7 downto 0);
-    signal rst_s : std_logic := '0';
+    signal reset_mk : std_logic := '0';
 
 begin
     maq_estado : state_machine port map(
-        clk=>clk, rst=>rst_s, estado=>estado_s
+        clk=>clk, reset=>reset_mk, estado=>estado_s
     );
     
     -- 0000 0000 NOP
@@ -52,17 +52,19 @@ begin
     pc_en <= '1' when estado_s = "00" else
                 '0';
 
-    fetch_en <= '1' when estado_s = "00" else
+    fetch_en <= '1' when estado_s = "01" else
                 '0';
 
-    reg_en <= '1' when estado_s = "10" and opcode /= "1111" else
+    wr_reg_en <= '1' when estado_s = "11" and reset_mk = '0' else
                 '0';
     
     -- Escolhe entre o endereço do jump (const) ou não
     mux_pc <= '1' when opcode = "1111" else
                 '0';
 
-    rst_s <= '1' when opcode = "1111" or nop = "00000000" else
+    reset_mk <=  '1' when reset = '1' or 
+                    (opcode = "1111" and estado_s="10") or
+                    (nop = "00000000" and estado_s="11") else
                 '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" else -- Soma

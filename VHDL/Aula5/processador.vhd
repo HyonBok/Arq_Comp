@@ -2,12 +2,12 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity main is
+entity processador is
     port(   clk, reset : in std_logic
     );
 end entity;
 
-architecture a_main of main is 
+architecture a_processador of processador is 
  
     component rom is
         port(   clk  : in std_logic;
@@ -17,16 +17,16 @@ architecture a_main of main is
     end component;
 
     component pc is
-        port(   clk, rst, pc_mux, pc_en  : in std_logic;
+        port(   clk, reset, pc_mux, pc_en  : in std_logic;
                 data_in  : in unsigned(6 downto 0);
                 data_out : out unsigned(6 downto 0)
         );
     end component;
 
     component un_controle is 
-        port(   clk, rst: in std_logic;
+        port(   clk, reset: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, reg_en, mux_pc, mux_ula: out std_logic;
+            pc_en, fetch_en, wr_reg_en, mux_pc, mux_ula: out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(1 downto 0)
@@ -42,7 +42,7 @@ architecture a_main of main is
     end component;
 
     component banco_reg is 
-        port(   clk, rst, wr_en : in std_logic;
+        port(   clk, reset, wr_en : in std_logic;
                 reg_wr, reg_r1, reg_r2  : in unsigned(2 downto 0);
                 data_wr : in unsigned(15 downto 0);
                 data_r1, data_r2 : out unsigned(15 downto 0)
@@ -50,14 +50,14 @@ architecture a_main of main is
     end component;
 
     component reg14bits is 
-        port(   clk, rst, wr_en : in std_logic;
+        port(   clk, reset, wr_en : in std_logic;
                 data_in : in unsigned(13 downto 0);
                 data_out : out unsigned(13 downto 0)
         );
     end component;
 
     
-    signal pc_en_s, fetch_en_s, reg_en_s, mux_pc_s, mux_ula_s, z, n, clk_inv : std_logic;
+    signal pc_en_s, fetch_en_s, wr_reg_en, mux_pc_s, mux_ula_s, z, n : std_logic;
     signal saida_pc, new_address : unsigned(6 downto 0);
     signal saida_rom, instrucao : unsigned(13 downto 0);
     signal reg1, reg2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
@@ -69,7 +69,7 @@ architecture a_main of main is
 begin
     pc1 : pc port map(
         clk=>clk, 
-        rst=>reset, 
+        reset=>reset, 
         pc_mux=>mux_pc_s, 
         pc_en=>pc_en_s,
         data_in=>new_address, 
@@ -82,11 +82,11 @@ begin
     );
     controle : un_controle port map(
         clk=>clk, 
-        rst=>reset, 
+        reset=>reset, 
         instrucao=>instrucao,
         pc_en=>pc_en_s, 
         fetch_en=>fetch_en_s, 
-        reg_en=>reg_en_s,
+        wr_reg_en=>wr_reg_en,
         mux_pc=>mux_pc_s, 
         mux_ula=>mux_ula_s, 
         sel_op_ula=>sel_op_ula, 
@@ -94,7 +94,7 @@ begin
         estado=>estado
     );
     fetch: reg14bits port map(
-        clk=> clk_inv, rst=>reset, 
+        clk=> clk, reset=>reset, 
         wr_en=>fetch_en_s,
         data_in=>saida_rom, 
         data_out=>instrucao
@@ -108,8 +108,8 @@ begin
     );
     banco : banco_reg port map(
         clk=>clk, 
-        rst=>reset, 
-        wr_en=>reg_en_s,
+        reset=>reset, 
+        wr_en=>wr_reg_en,
         reg_wr=>sel_reg_wr,
         reg_r1=>sel_reg1,
         reg_r2=>sel_reg2,
@@ -117,8 +117,6 @@ begin
         data_r1=>reg1, 
         data_r2=>reg2
     );
-
-    clk_inv <= not clk;
 
     sel_reg_wr <= instrucao(9 downto 7);
     sel_reg1 <= instrucao(6 downto 4);
