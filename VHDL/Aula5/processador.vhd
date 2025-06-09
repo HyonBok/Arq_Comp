@@ -57,7 +57,7 @@ architecture a_processador of processador is
     end component;
 
     
-    signal pc_en_s, fetch_en_s, wr_reg_en, mux_pc_s, mux_ula_s, z, n, clk_inv : std_logic;
+    signal pc_en_s, fetch_en_s, wr_reg_en, mux_pc_s, mux_ula_s, z, n : std_logic;
     signal saida_pc, new_address : unsigned(6 downto 0);
     signal saida_rom, instrucao : unsigned(13 downto 0);
     signal reg1, reg2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
@@ -94,7 +94,7 @@ begin
         estado=>estado
     );
     fetch: reg14bits port map(
-        clk=> clk_inv, reset=>reset, 
+        clk=> clk, reset=>reset, 
         wr_en=>fetch_en_s,
         data_in=>saida_rom, 
         data_out=>instrucao
@@ -117,8 +117,6 @@ begin
         data_r1=>reg1, 
         data_r2=>reg2
     );
-
-    clk_inv <= clk;
 
     sel_reg_wr <= instrucao(9 downto 7);
     sel_reg1 <= instrucao(6 downto 4);

@@ -55,14 +55,16 @@ begin
     fetch_en <= '1' when estado_s = "01" else
                 '0';
 
-    wr_reg_en <= '1' when estado_s = "10" and opcode /= "1111" else
+    wr_reg_en <= '1' when estado_s = "11" and reset_mk = '0' else
                 '0';
     
     -- Escolhe entre o endereço do jump (const) ou não
     mux_pc <= '1' when opcode = "1111" else
                 '0';
 
-    reset_mk <= --'1' when opcode = "1111" and estado_s="10" else --or nop = "00000000" else
+    reset_mk <=  '1' when reset = '1' or 
+                    (opcode = "1111" and estado_s="10") or
+                    (nop = "00000000" and estado_s="11") else
                 '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" else -- Soma
