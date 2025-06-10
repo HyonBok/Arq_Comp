@@ -7,7 +7,7 @@ entity ula is
         a0, a1:  in  unsigned(15 downto 0); -- Entradas
         selec:  in  unsigned(1 downto 0);
         resultado:  out  unsigned(15 downto 0);
-        z, n: out std_logic
+        z, n, dif_zero: out std_logic
     );
 end entity;
 
@@ -27,6 +27,9 @@ begin
         op_ou when selec = "11";
 
     resultado <= result;
+
+    dif_zero <= '1' when result /= "0000000000000000" else
+                '0';
 
     z <= '1' when result = "0000000000000000" else '0';
     n <= result(15);

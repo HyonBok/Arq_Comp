@@ -5,10 +5,11 @@ use ieee.numeric_std.all;
 entity un_controle is 
     port(   clk, reset: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, wr_reg_en, mux_pc, mux_ula: out std_logic;
+            pc_en, fetch_en, wr_reg_en, mux_pc, mux_ula, pc_relativo: out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
-            estado: out unsigned(1 downto 0)
+            estado: out unsigned(1 downto 0);
+            new_address: out unsigned(6 downto 0)
     );
 end entity;
 
@@ -25,7 +26,7 @@ architecture a_un_controle of un_controle is
     signal estado_s : unsigned(1 downto 0);
     signal opcode : unsigned(3 downto 0);
     signal nop : unsigned(7 downto 0);
-    signal reset_mk : std_logic := '0';
+    signal reset_mk, jmp_en : std_logic := '0';
 
 begin
     maq_estado : state_machine port map(
@@ -34,6 +35,7 @@ begin
     
     -- 0000 0000 NOP
     -- 1111 JMP
+    -- 1000 BNE
     -- ULA:
     -- 0000 ADD
     -- 0001 SUB
@@ -43,7 +45,6 @@ begin
     -- 0101 SUBI
     -- CARGA:
     -- 1100 LOAD
-    -- 1101 SAVE
 
     opcode <= instrucao(13 downto 10);
 
@@ -55,20 +56,23 @@ begin
     fetch_en <= '1' when estado_s = "01" else
                 '0';
 
-    wr_reg_en <= '1' when estado_s = "11" and reset_mk = '0' else
+    wr_reg_en <= '1' when estado_s = "11" and reset_mk = '0' and jmp_en = '0' else
                 '0';
     
     -- Escolhe entre o endereço do jump (const) ou não
-    mux_pc <= '1' when opcode = "1111" else
+    mux_pc <= '1' when jmp_en = '1' else
                 '0';
+
+    jmp_en <= '1' when opcode = "1000" or opcode = "1111" else
+            '0';
 
     reset_mk <=  '1' when reset = '1' or 
                     (opcode = "1111" and estado_s="10") or
                     (nop = "00000000" and estado_s="11") else
-                '0';
+                    '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" else -- Soma
-                "01" when opcode = "0001" or opcode = "0101" else -- Subtração
+                "01" when opcode = "0001" or opcode = "0101" or opcode = "1000" else -- Subtração
                 "10" when opcode = "0010" else -- E lógico
                 "11" when opcode = "0011" else -- Ou lógico
                 "00";
@@ -88,5 +92,12 @@ begin
                 const_load;
 
     estado <= estado_s;
+
+    pc_relativo <=  '1' when opcode(1 downto 0) = "00" else
+                    '0';
+
+    new_address <=  instrucao(6 downto 0) when opcode(1 downto 0) = "11" else
+                    instrucao(0) & "000" & instrucao(9 downto 7) when instrucao(0) = '0' else
+                    instrucao(0) & "111" & instrucao(9 downto 7);
 
 end architecture;

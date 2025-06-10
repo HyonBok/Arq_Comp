@@ -9,6 +9,7 @@ ADDI:   0100 ddd sss cccc
 SUBI:   0101 ddd sss cccc
 LI:     1100 ddd bbbbbbb
 JMP:    1111 xxx aaaaaaa
+BNE:    1000 ccc sss rrrc
 
 onde:
 opcode  = primeiros 4 bits
