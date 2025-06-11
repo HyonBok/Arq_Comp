@@ -19,7 +19,7 @@ begin
     saida_relativo <= data_in when pc_relativo = '0' else
                     registro + data_in;
 
-    entrada_pc <=   saida_relativo when pc_mux='1' or jmp_en='1' else 
+    entrada_pc <=   saida_relativo when (pc_mux='1' and pc_relativo = '0') or jmp_en='1' else 
                     registro + 1;
 
     process(clk, reset, pc_en)

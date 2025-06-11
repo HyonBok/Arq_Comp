@@ -26,16 +26,17 @@ architecture a_un_controle of un_controle is
     signal estado_s : unsigned(2 downto 0);
     signal opcode : unsigned(3 downto 0);
     signal nop : unsigned(7 downto 0);
-    signal reset_mk, jmp_en : std_logic := '0';
+    signal jmp_en : std_logic := '0';
 
 begin
     maq_estado : state_machine port map(
-        clk=>clk, reset=>reset_mk, estado=>estado_s
+        clk=>clk, reset=>reset, estado=>estado_s
     );
     
     -- 0000 0000 NOP
     -- 1111 JMP
     -- 1000 BNE
+    -- 1001 BL
     -- ULA:
     -- 0000 ADD
     -- 0001 SUB
@@ -56,20 +57,16 @@ begin
     fetch_en <= '1' when estado_s = "001" else
                 '0';
 
-    wr_reg_en <= '1' when estado_s = "011" and reset_mk = '0' and jmp_en = '0' else
+    wr_reg_en <= '1' when estado_s = "011" and reset = '0' and jmp_en = '0' else
                 '0';
     
     -- Escolhe entre o endereço do jump (const) ou não
     mux_pc <= '1' when jmp_en = '1' else
                 '0';
 
-    jmp_en <= '1' when opcode = "1000" or opcode = "1111" else
+    -- Existe o sinal para que possa ser comparada no "wr_reg_en" e ter certeza de não escrever quando for um salto
+    jmp_en <= '1' when opcode = "1111" or opcode = "1000" or opcode = "1001" else
             '0';
-
-    reset_mk <=  '1' when reset = '1' else 
-                    --(opcode = "1111" and estado_s="010") or
-                    --(nop = "00000000" and estado_s="011") else
-                    '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" else -- Soma
                 "01" when opcode = "0001" or opcode = "0101" or opcode = "1000" else -- Subtração
@@ -93,8 +90,8 @@ begin
 
     estado <= estado_s;
 
-    pc_relativo <=  '1' when opcode(1 downto 0) = "00" else
-                    '0';
+    pc_relativo <=  '0' when opcode(3 downto 2) = "11" else
+                    '1';
 
     new_address <=  instrucao(6 downto 0) when opcode(1 downto 0) = "11" else
                     instrucao(0) & "000" & instrucao(9 downto 7) when instrucao(0) = '0' else

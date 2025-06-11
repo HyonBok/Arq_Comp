@@ -38,7 +38,7 @@ architecture a_processador of processador is
         port(   a0, a1:  in  unsigned(15 downto 0); -- Entradas
                 selec:  in  unsigned(1 downto 0);
                 resultado:  out  unsigned(15 downto 0);
-                z, n, dif_zero: out std_logic
+                z, n: out std_logic
         );
     end component;
 
@@ -58,7 +58,7 @@ architecture a_processador of processador is
     end component;
 
     
-    signal pc_en_s, fetch_en_s, wr_reg_en, mux_pc_s, mux_ula_s, z, n, pc_relativo_s, dif_zero_s, jmp_en_s : std_logic;
+    signal pc_en_s, fetch_en_s, wr_reg_en, mux_pc_s, mux_ula_s, z, n, pc_relativo_s, jmp_en_s : std_logic;
     signal saida_pc, new_address : unsigned(6 downto 0);
     signal saida_rom, instrucao : unsigned(13 downto 0);
     signal reg1, reg2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
@@ -110,8 +110,7 @@ begin
         selec=>sel_op_ula, 
         resultado=>saida_ula, 
         z=>z, 
-        n=>n,
-        dif_zero=>dif_zero_s
+        n=>n
     );
     banco : banco_reg port map(
         clk=>clk, 
@@ -132,7 +131,7 @@ begin
     entrada_ula2 <= reg2 when mux_ula_s = '0' else
                     const_s;
 
-    jmp_en_s <= '1' when mux_pc_s = '1' and dif_zero_s = '1' else
+    jmp_en_s <= '1' when mux_pc_s = '1' and z = '0' else
                 '0';
 
 end architecture;
