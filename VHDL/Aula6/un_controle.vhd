@@ -8,7 +8,7 @@ entity un_controle is
             pc_en, fetch_en, wr_reg_en, mux_pc, mux_ula, pc_relativo: out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
-            estado: out unsigned(1 downto 0);
+            estado: out unsigned(2 downto 0);
             new_address: out unsigned(6 downto 0)
     );
 end entity;
@@ -18,12 +18,12 @@ architecture a_un_controle of un_controle is
 
     component state_machine is 
     port(   clk, reset : in std_logic;
-            estado : out unsigned(1 downto 0)
+            estado : out unsigned(2 downto 0)
     );
     end component;
 
     signal const_i, const_load : unsigned(15 downto 0);
-    signal estado_s : unsigned(1 downto 0);
+    signal estado_s : unsigned(2 downto 0);
     signal opcode : unsigned(3 downto 0);
     signal nop : unsigned(7 downto 0);
     signal reset_mk, jmp_en : std_logic := '0';
@@ -50,13 +50,13 @@ begin
 
     nop <= instrucao(13 downto 6);
 
-    pc_en <= '1' when estado_s = "00" else
+    pc_en <= '1' when estado_s = "100" else
                 '0';
 
-    fetch_en <= '1' when estado_s = "01" else
+    fetch_en <= '1' when estado_s = "001" else
                 '0';
 
-    wr_reg_en <= '1' when estado_s = "11" and reset_mk = '0' and jmp_en = '0' else
+    wr_reg_en <= '1' when estado_s = "011" and reset_mk = '0' and jmp_en = '0' else
                 '0';
     
     -- Escolhe entre o endereço do jump (const) ou não
@@ -66,9 +66,9 @@ begin
     jmp_en <= '1' when opcode = "1000" or opcode = "1111" else
             '0';
 
-    reset_mk <=  '1' when reset = '1' or 
-                    (opcode = "1111" and estado_s="10") or
-                    (nop = "00000000" and estado_s="11") else
+    reset_mk <=  '1' when reset = '1' else 
+                    --(opcode = "1111" and estado_s="010") or
+                    --(nop = "00000000" and estado_s="011") else
                     '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" else -- Soma
