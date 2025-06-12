@@ -69,7 +69,7 @@ begin
             '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" else -- Soma
-                "01" when opcode = "0001" or opcode = "0101" or opcode = "1000" else -- Subtração
+                "01" when opcode = "0001" or opcode = "0101" or opcode = "1000" or opcode = "1001" else -- Subtração
                 "10" when opcode = "0010" else -- E lógico
                 "11" when opcode = "0011" else -- Ou lógico
                 "00";
