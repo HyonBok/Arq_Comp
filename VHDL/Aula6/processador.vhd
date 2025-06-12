@@ -17,7 +17,7 @@ architecture a_processador of processador is
     end component;
 
     component pc is
-        port(   clk, reset, pc_mux, pc_en, pc_relativo, jmp_en : in std_logic;
+        port(   clk, reset, jmp_en, pc_en, pc_relativo, branch_en : in std_logic;
                 data_in  : in unsigned(6 downto 0);
                 data_out : out unsigned(6 downto 0)
         );
@@ -58,7 +58,7 @@ architecture a_processador of processador is
     end component;
 
     
-    signal pc_en_s, fetch_en_s, wr_reg_en, mux_pc_s, mux_ula_s, z, n, v, pc_relativo_s, jmp_en_s : std_logic;
+    signal pc_en_s, fetch_en_s, wr_reg_en, jmp_en_s, mux_ula_s, z, n, v, pc_relativo_s, branch_en_s : std_logic;
     signal saida_pc, new_address : unsigned(6 downto 0);
     signal saida_rom, instrucao : unsigned(13 downto 0);
     signal reg1, reg2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
@@ -72,12 +72,12 @@ begin
     pc1 : pc port map(
         clk=>clk, 
         reset=>reset, 
-        pc_mux=>mux_pc_s, 
+        jmp_en=>jmp_en_s, 
         pc_en=>pc_en_s,
         pc_relativo=>pc_relativo_s,
         data_in=>new_address, 
         data_out=>saida_pc,
-        jmp_en=>jmp_en_s
+        branch_en=>branch_en_s
     );   
     rom1 : rom port map(
         clk=>clk, 
@@ -134,12 +134,12 @@ begin
                     const_s;
 
     -- JMP
-    mux_pc_s <= '1' when instrucao(13 downto 10) = "1111" else
+    jmp_en_s <= '1' when instrucao(13 downto 10) = "1111" else
                 '0';
 
     -- BNE
     -- BL
-    jmp_en_s <= '1' when (instrucao(13 downto 10) = "1000" and z = '0') or 
+    branch_en_s <= '1' when (instrucao(13 downto 10) = "1000" and z = '0') or 
                          (instrucao(13 downto 10) = "1001" and saida_ula(15) = '1' and v = '0') else
                 '0';
 
