@@ -24,9 +24,9 @@ architecture a_processador of processador is
     end component;
 
     component un_controle is 
-        port(   clk, reset: in std_logic;
+        port(   clk, reset, jmp_en: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, wr_reg_en, mux_pc, mux_ula, pc_relativo: out std_logic;
+            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo: out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(2 downto 0);
@@ -37,9 +37,8 @@ architecture a_processador of processador is
     component ula is 
         port(   a0, a1:  in  unsigned(15 downto 0); -- Entradas
                 selec:  in  unsigned(1 downto 0);
-                opcode: in unsigned(3 downto 0);
                 resultado:  out  unsigned(15 downto 0);
-                z, n, v, jmp_en: out std_logic
+                z, n, v: out std_logic
         );
     end component;
 
@@ -92,13 +91,13 @@ begin
         pc_en=>pc_en_s, 
         fetch_en=>fetch_en_s, 
         wr_reg_en=>wr_reg_en,
-        mux_pc=>mux_pc_s, 
         mux_ula=>mux_ula_s, 
         sel_op_ula=>sel_op_ula, 
         const=>const_s,
         estado=>estado,
         pc_relativo=>pc_relativo_s,
-        new_address=>new_address
+        new_address=>new_address,
+        jmp_en=>jmp_en_s
     );
     fetch: reg14bits port map(
         clk=> clk, reset=>reset, 
@@ -113,9 +112,7 @@ begin
         resultado=>saida_ula, 
         z=>z, 
         n=>n,
-        v=>v,
-        jmp_en=>jmp_en_s,
-        opcode=>opcode_s
+        v=>v
     );
     banco : banco_reg port map(
         clk=>clk, 
@@ -136,10 +133,14 @@ begin
     entrada_ula2 <= reg2 when mux_ula_s = '0' else
                     const_s;
 
-    opcode_s <= instrucao(13 downto 10);
+    mux_pc_s <= '1' when instrucao(13 downto 10) = "1111" else
+                '0';
 
-    --jmp_en_s <= '1' when mux_pc_s = '1' and z = '0' else
-    --            '0';
+    -- BNE
+    -- BL
+    jmp_en_s <= '1' when (instrucao(13 downto 10) = "1000" and z = '0') or 
+                         (instrucao(13 downto 10) = "1001" and saida_ula(15) = '1' and v = '0') else
+                '0';
 
 end architecture;
 

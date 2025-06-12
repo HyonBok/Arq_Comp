@@ -3,9 +3,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity un_controle is 
-    port(   clk, reset: in std_logic;
+    port(   clk, reset, jmp_en: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, wr_reg_en, mux_pc, mux_ula, pc_relativo: out std_logic;
+            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo: out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(2 downto 0);
@@ -26,7 +26,6 @@ architecture a_un_controle of un_controle is
     signal estado_s : unsigned(2 downto 0);
     signal opcode : unsigned(3 downto 0);
     signal nop : unsigned(7 downto 0);
-    signal jmp_en : std_logic := '0';
 
 begin
     maq_estado : state_machine port map(
@@ -57,16 +56,8 @@ begin
     fetch_en <= '1' when estado_s = "001" else
                 '0';
 
-    wr_reg_en <= '1' when estado_s = "011" and reset = '0' and jmp_en = '0' else
+    wr_reg_en <= '1' when estado_s = "011" and reset = '0' and jmp_en = '0' and opcode /= "1111" else
                 '0';
-    
-    -- Escolhe entre o endereço do jump (const) ou não
-    mux_pc <= '1' when jmp_en = '1' else
-                '0';
-
-    -- Existe o sinal para que possa ser comparada no "wr_reg_en" e ter certeza de não escrever quando for um salto
-    jmp_en <= '1' when opcode = "1111" or opcode = "1000" or opcode = "1001" else
-            '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" else -- Soma
                 "01" when opcode = "0001" or opcode = "0101" or opcode = "1000" or opcode = "1001" else -- Subtração
