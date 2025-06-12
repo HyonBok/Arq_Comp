@@ -29,7 +29,7 @@ architecture a_processador of processador is
             pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo: out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
-            estado: out unsigned(2 downto 0);
+            estado: out unsigned(1 downto 0);
             new_address: out unsigned(6 downto 0)
     );  
     end component;
@@ -66,7 +66,7 @@ architecture a_processador of processador is
     signal sel_op_ula : unsigned(1 downto 0);
     signal opcode_s : unsigned(3 downto 0);
 
-    signal estado: unsigned(2 downto 0);
+    signal estado: unsigned(1 downto 0);
 
 begin
     pc1 : pc port map(
@@ -133,6 +133,7 @@ begin
     entrada_ula2 <= reg2 when mux_ula_s = '0' else
                     const_s;
 
+    -- JMP
     mux_pc_s <= '1' when instrucao(13 downto 10) = "1111" else
                 '0';
 
