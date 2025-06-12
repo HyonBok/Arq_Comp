@@ -8,7 +8,7 @@ entity ula is
         selec:  in  unsigned(1 downto 0);
         opcode: in unsigned(3 downto 0);
         resultado:  out  unsigned(15 downto 0);
-        z, n, v, jmp_en: out std_logic
+        z, n, v, branch_en: out std_logic
     );
 end entity;
 
@@ -48,7 +48,7 @@ begin
 
     -- BNE 
     -- BL
-    jmp_en <= '1' when  (opcode = "1000" and z_s = '0') or 
+    branch_en <= '1' when  (opcode = "1000" and z_s = '0') or 
                         (opcode = "1001" and result(15) = '1' and v_s = '0') else
             '0';
 

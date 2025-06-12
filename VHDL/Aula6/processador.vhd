@@ -17,7 +17,7 @@ architecture a_processador of processador is
     end component;
 
     component pc is
-        port(   clk, reset, pc_mux, pc_en, pc_relativo, jmp_en : in std_logic;
+        port(   clk, reset, jmp_en, pc_en, pc_relativo, branch_en : in std_logic;
                 data_in  : in unsigned(6 downto 0);
                 data_out : out unsigned(6 downto 0)
         );
@@ -26,7 +26,7 @@ architecture a_processador of processador is
     component un_controle is 
         port(   clk, reset: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, wr_reg_en, mux_pc, mux_ula, pc_relativo: out std_logic;
+            pc_en, fetch_en, wr_reg_en, jmp_en, mux_ula, pc_relativo: out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(2 downto 0);
@@ -39,7 +39,7 @@ architecture a_processador of processador is
                 selec:  in  unsigned(1 downto 0);
                 opcode: in unsigned(3 downto 0);
                 resultado:  out  unsigned(15 downto 0);
-                z, n, v, jmp_en: out std_logic
+                z, n, v, branch_en: out std_logic
         );
     end component;
 
@@ -59,7 +59,7 @@ architecture a_processador of processador is
     end component;
 
     
-    signal pc_en_s, fetch_en_s, wr_reg_en, mux_pc_s, mux_ula_s, z, n, v, pc_relativo_s, jmp_en_s : std_logic;
+    signal pc_en_s, fetch_en_s, wr_reg_en, jmp_en_s, mux_ula_s, z, n, v, pc_relativo_s, branch_en_s : std_logic;
     signal saida_pc, new_address : unsigned(6 downto 0);
     signal saida_rom, instrucao : unsigned(13 downto 0);
     signal reg1, reg2, entrada_ula2, saida_ula, const_s : unsigned(15 downto 0);
@@ -73,12 +73,12 @@ begin
     pc1 : pc port map(
         clk=>clk, 
         reset=>reset, 
-        pc_mux=>mux_pc_s, 
+        jmp_en=>jmp_en_s, 
         pc_en=>pc_en_s,
         pc_relativo=>pc_relativo_s,
         data_in=>new_address, 
         data_out=>saida_pc,
-        jmp_en=>jmp_en_s
+        branch_en=>branch_en_s
     );   
     rom1 : rom port map(
         clk=>clk, 
@@ -92,7 +92,7 @@ begin
         pc_en=>pc_en_s, 
         fetch_en=>fetch_en_s, 
         wr_reg_en=>wr_reg_en,
-        mux_pc=>mux_pc_s, 
+        jmp_en=>jmp_en_s,
         mux_ula=>mux_ula_s, 
         sel_op_ula=>sel_op_ula, 
         const=>const_s,
@@ -114,7 +114,7 @@ begin
         z=>z, 
         n=>n,
         v=>v,
-        jmp_en=>jmp_en_s,
+        branch_en=>branch_en_s,
         opcode=>opcode_s
     );
     banco : banco_reg port map(
@@ -137,9 +137,6 @@ begin
                     const_s;
 
     opcode_s <= instrucao(13 downto 10);
-
-    --jmp_en_s <= '1' when mux_pc_s = '1' and z = '0' else
-    --            '0';
 
 end architecture;
 

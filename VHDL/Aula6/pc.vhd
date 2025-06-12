@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity pc is 
-    port(   clk, reset, pc_mux, pc_en, pc_relativo, jmp_en : in std_logic;
+    port(   clk, reset, jmp_en, pc_en, pc_relativo, branch_en : in std_logic;
             data_in  : in unsigned(6 downto 0);
             data_out : out unsigned(6 downto 0)
     );
@@ -19,7 +19,7 @@ begin
     saida_relativo <= data_in when pc_relativo = '0' else
                     registro + data_in;
 
-    entrada_pc <=   saida_relativo when (pc_mux='1' and pc_relativo = '0') or jmp_en='1' else 
+    entrada_pc <=   saida_relativo when (jmp_en='1' and pc_relativo = '0') or branch_en='1' else 
                     registro + 1;
 
     process(clk, reset, pc_en)
