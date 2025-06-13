@@ -1,0 +1,7 @@
+1-  LI R3, 0
+2-  LI R4, 0
+3-  LI R1, 30
+4-  ADD R4, R4, R3
+5-  ADDI R3, R3, 1
+6-  BNE R3,R1,-2    -- Se R3 != R1, volta 2 linhas
+7-  ADDI R5, R4, 0
