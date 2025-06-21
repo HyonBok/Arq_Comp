@@ -59,7 +59,7 @@ begin
     fetch_en <= '1' when estado_s = "001" else
                 '0';
 
-    wr_reg_en <= '1' when (estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1111" and opcode /= "0111" and opcode /= "0110") or (estado_s = "100" and opcode = "0110") else
+    wr_reg_en <= '1' when (estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1111" and opcode(2 downto 1) /= "11") or (estado_s = "100" and opcode = "0110") else
                 '0';
 
     wr_ram_en <= '1' when estado_s = "011" and opcode = "0111" else
@@ -77,9 +77,9 @@ begin
     mux_ula <= '1' when opcode(2) = '1' else
                 '0';
 
-    const_i(15) <= instrucao(3);
+    const_i(15) <= instrucao(6);
     const_i(2 downto 0) <= instrucao(2 downto 0);
-    const_i(14 downto 3) <= "111111111111" when instrucao(3) = '1' else
+    const_i(14 downto 3) <= "111111111111" when instrucao(6) = '1' else
                             "000000000000";
 
     const_7bits(15) <= instrucao(6);

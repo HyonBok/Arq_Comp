@@ -12,10 +12,13 @@ end entity;
 architecture a_rom of rom is
     type mem is array (0 to 127) of unsigned(13 downto 0);
     constant conteudo_rom : mem := (
-        0 => B"1100_011_0000111", -- 1100 = Load-Upper-Int, Rd, Constante
-        1 => B"1100_010_0000011", -- 1100 = Load-Upper-Int, Rd, Constante
-        2 => B"0111_0000_010_011", -- 0111 = Save-Word, Constante, Re, R1 
-        3 => B"0110_0000_010_001", -- 0111 = Load-Word, Constante, Re, Rd
+        0 => B"1100_001_0000000", -- 1100 = Load-Upper-Int, Rd, Constante
+        1 => B"1100_010_0000000", -- 1100 = Load-Upper-Int, Rd, Constante
+        2 => B"1100_011_0100000", -- 1100 = Load-Upper-Int, Rd, Constante
+        3 => B"0100_001_0_001_001", -- 0100 = ADDI, Rd, R1, Constante
+        4 => B"0100_010_0_010_001", -- 0100 = ADDI, Rd, R1, Constante
+        5 => B"0111_0000_010_001", -- 0111 = Save-Word, Constante, Re, R1 
+        6 => B"1001_101_010_001_1", -- 1001 = BL, Constante, R1, R2, M
         others => (others=>'0')
     );
     

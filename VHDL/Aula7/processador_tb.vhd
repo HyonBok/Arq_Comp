@@ -13,7 +13,7 @@ architecture a_processador_tb of processador_tb is
 
     signal clk, reset : std_logic;
 
-    constant period_time : time      := 50 ns;
+    constant period_time : time      := 20 ns;
     signal   finished    : std_logic := '0';
 
 begin 
@@ -33,7 +33,7 @@ begin
 
     sim_time_proc: process
     begin
-        wait for 10 us;         
+        wait for 50 us;         
         finished <= '1';
         wait;
     end process sim_time_proc;

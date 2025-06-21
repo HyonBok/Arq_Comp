@@ -5,8 +5,8 @@ ADD:    0000 dddx sss rrr
 SUB:    0001 dddx sss rrr
 AND:    0010 dddx sss rrr
 OR:     0011 dddx sss rrr
-ADDI:   0100 ddd sss mccc
-SUBI:   0101 ddd sss mccc
+ADDI:   0100 dddm sss ccc
+SUBI:   0101 dddm sss ccc
 LW:     0110 mccc eee ddd
 SW:     0111 mccc eee rrr
 LI:     1100 ddd bbbbbbb
