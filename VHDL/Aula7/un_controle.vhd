@@ -102,8 +102,8 @@ begin
                     '1';
 
     new_address <=  instrucao(6 downto 0) when opcode(1 downto 0) = "11" else
-                    instrucao(0) & "000" & instrucao(9 downto 7) when instrucao(0) = '0' else
-                    instrucao(0) & "111" & instrucao(9 downto 7);
+                    instrucao(9) & "000" & instrucao(8 downto 6) when instrucao(9) = '0' else
+                    instrucao(9) & "111" & instrucao(8 downto 6);
 
 
 

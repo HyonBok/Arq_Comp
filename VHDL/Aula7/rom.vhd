@@ -18,7 +18,7 @@ architecture a_rom of rom is
         3 => B"0100_001_0_001_001", -- 0100 = ADDI, Rd, R1, Constante
         4 => B"0100_010_0_010_001", -- 0100 = ADDI, Rd, R1, Constante
         5 => B"0111_0000_010_001", -- 0111 = Save-Word, Constante, Re, R1 
-        6 => B"1001_101_010_001_1", -- 1001 = BL, Constante, R1, R2, M
+        6 => B"1001_1101_001_011", -- 1001 = BL, Constante, R1, R2
         others => (others=>'0')
     );
     
