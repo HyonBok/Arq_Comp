@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity un_controle is 
-    port(   clk, reset, jmp_en: in std_logic;
+    port(   clk, reset, branch_en: in std_logic;
             instrucao : in unsigned(13 downto 0);
             pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, sel_mux_regs : out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
@@ -59,17 +59,20 @@ begin
     fetch_en <= '1' when estado_s = "001" else
                 '0';
 
-    wr_reg_en <= '1' when estado_s = "010" and reset = '0' and jmp_en = '0' and opcode /= "1111" else
+    wr_reg_en <= '1' when (estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1111" and opcode /= "0111" and opcode /= "0110") or (estado_s = "100" and opcode = "0110") else
                 '0';
 
     wr_ram_en <= '1' when estado_s = "011" and opcode = "0111" else
                 '0';
 
-    sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" or opcode = "0111" else -- Soma
+    sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" or opcode = "0111" or opcode = "0110" else -- Soma
                 "01" when opcode = "0001" or opcode = "0101" or opcode = "1000" or opcode = "1001" else -- Subtração
                 "10" when opcode = "0010" else -- E lógico
                 "11" when opcode = "0011" else -- Ou lógico
                 "00";
+
+    sel_mux_regs <= '1' when opcode = "0110" else
+                    '0';
 
     mux_ula <= '1' when opcode(2) = '1' else
                 '0';

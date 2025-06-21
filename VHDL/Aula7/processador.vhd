@@ -24,7 +24,7 @@ architecture a_processador of processador is
     end component;
 
     component un_controle is 
-        port(   clk, reset, jmp_en: in std_logic;
+        port(   clk, reset, branch_en: in std_logic;
             instrucao : in unsigned(13 downto 0);
             pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, sel_mux_regs : out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
@@ -105,7 +105,7 @@ begin
         estado=>estado,
         pc_relativo=>pc_relativo_s,
         new_address=>new_address,
-        jmp_en=>jmp_en_s,
+        branch_en=>branch_en_s,
         wr_ram_en=>wr_ram_en,
         sel_mux_regs=>sel_mux_regs
     );
@@ -131,7 +131,7 @@ begin
         reg_wr=>sel_reg_wr,
         reg_r1=>sel_reg1,
         reg_r2=>sel_reg2,
-        data_wr=>saida_ula, 
+        data_wr=>entrada_data_wr, 
         data_r1=>reg1, 
         data_r2=>reg2
     );
@@ -143,7 +143,8 @@ begin
         dado_out=>saida_ram
     );
 
-    sel_reg_wr <= instrucao(9 downto 7);
+    sel_reg_wr <= instrucao(9 downto 7) when sel_mux_regs = '0' else
+                  instrucao(2 downto 0);
     sel_reg1 <= instrucao(5 downto 3);
     sel_reg2 <= instrucao(2 downto 0);
 
