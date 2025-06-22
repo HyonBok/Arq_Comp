@@ -32,7 +32,7 @@ architecture a_rom of rom is
         12 => B"0100_010_0_010_001", -- 0100 = ADDI, Rd, R1, Constante
         13 => B"0111_0000_010_001", -- 0111 = Save-Word, Constante, Re, R1 
         14 => B"1011_0000_010_101", -- CMP+:   1011 xxxx sss rrr             compara (Soma) R2 e R5
-        15 => B"1010_000_1111101", --  BVC:    1010 xxx 1bbbbbb              se não overflow pula -3
+        15 => B"1010_000_1111101", --  BVC:    1010 xxx bbbbbbb              se não overflow pula -3
         
         -- 0 para zerar os valores na RAM
         16 => B"1100_001_0000000", -- 1100 = Load-Upper-Int, Rd, Constante

@@ -13,8 +13,8 @@ LW:     0110 mccc eee ddd
 SW:     0111 mccc eee rrr
 LI:     1100 ddd bbbbbbb
 JMP:    1111 xxx aaaaaaa
-BNE:    1000 xxxx bbbbbb
-BVC:    1010 xxxx bbbbbb
+BNE:    1000 xxx mbbbbbb
+BVC:    1010 xxx mbbbbbb
 
 onde:
 opcode  = primeiros 4 bits
