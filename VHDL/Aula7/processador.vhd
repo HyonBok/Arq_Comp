@@ -185,7 +185,7 @@ begin
     -- BNE
     -- BL
     branch_en_s <= '1' when (instrucao(13 downto 10) = "1000" and z_saved = '0') or 
-                            (instrucao(13 downto 10) = "1101" and v_saved = '0') else
+                            (instrucao(13 downto 10) = "1010" and v_saved = '0') else
                 '0';
 
 end architecture;

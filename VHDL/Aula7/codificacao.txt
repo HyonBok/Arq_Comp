@@ -8,11 +8,13 @@ OR:     0011 dddx sss rrr
 ADDI:   0100 dddm sss ccc
 SUBI:   0101 dddm sss ccc
 CMP:    1001 xxxx sss rrr
+CMP+:   1011 xxxx sss rrr
 LW:     0110 mccc eee ddd
 SW:     0111 mccc eee rrr
 LI:     1100 ddd bbbbbbb
 JMP:    1111 xxx aaaaaaa
 BNE:    1000 sssx bbbbbb
+BVC:    1010 sssx bbbbbb
 
 onde:
 opcode  = primeiros 4 bits
