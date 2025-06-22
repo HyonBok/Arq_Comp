@@ -67,7 +67,7 @@ begin
     wr_ram_en <= '1' when estado_s = "011" and opcode = "0111" else
                 '0';
 
-    sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" or opcode = "0111" or opcode = "0110" or opcode = "1101" else -- Soma
+    sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" or opcode = "0111" or opcode = "0110" or opcode = "1011" else -- Soma
                 "01" when opcode = "0001" or opcode = "0101" or opcode = "1001" else -- Subtração
                 "10" when opcode = "0010" else -- E lógico
                 "11" when opcode = "0011" else -- Ou lógico
