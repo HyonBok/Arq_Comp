@@ -27,17 +27,15 @@ architecture a_rom of rom is
         9 => B"0111_0010_011_010", -- Save-Word, Constante, Re, R1 (Salva 16 em 19)
         10 => B"0111_0000_101_100", -- Save-Word, Constante, Re, R1 (Salva -1 em 1)
         11 => B"0111_1111_111_110", -- Save-Word, Constante, Re, R1 (Salva -4 em 3)
-
-        -- Atualizando registradores para leitura direta dos registradores, sem precisar da constante na hora do Load
-        12 => B"1100_011_0010011", -- Load-Int, Rd, Constante (19)
-        13 => B"1100_111_0000011", -- Load-Int, Rd, Constante (3)
+        12 => B"0111_0000_010_010", -- Save-Word, Constante, Re, R1 (Salva 16 em 16)
 
         -- Lê os valores da RAM
-        14 => B"0110_0000_001_110", -- Load-Word, Constante, Re, R1 (Carregar End10 em R6)
-        15 => B"0110_0000_011_100", -- Load-Word, Constante, Re, R1 (Carregar End19 em R4)
-        16 => B"0110_0000_101_010", -- Load-Word, Constante, Re, R1 (Carregar End1 em R2)
-        17 => B"0000_0000_000000", -- NOP
-        18 => B"0110_0000_111_000", -- Load-Word, Constante, Re, R1 (Carregar End3 em R0)
+        13 => B"0110_0000_001_110", -- Load-Word, Constante, Re, R1 (Carregar End10 em R6)
+        14 => B"0110_0010_011_100", -- Load-Word, Constante, Re, R1 (Carregar End19 em R4)
+        15 => B"0110_0000_101_010", -- Load-Word, Constante, Re, R1 (Carregar End1 em R2)
+        16 => B"0000_0000_000000", -- NOP
+        17 => B"0110_1111_111_000", -- Load-Word, Constante, Re, R1 (Carregar End3 em R0)
+        18 => B"0110_0110_001_110", -- Load-Word, Constante, Re, R1 (Carregar End16 em R6)
         others => (others=>'0')
     );
     
