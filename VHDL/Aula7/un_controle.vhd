@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity un_controle is 
     port(   clk, reset, branch_en: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, sel_mux_regs : out std_logic;
+            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, sel_mux_regs, wr_en_flags_ffs : out std_logic;
             sel_op_ula: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(2 downto 0);
@@ -59,14 +59,17 @@ begin
     fetch_en <= '1' when estado_s = "001" else
                 '0';
 
-    wr_reg_en <= '1' when (estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1111" and opcode(2 downto 1) /= "11") or (estado_s = "100" and opcode = "0110") else
+    wr_en_flags_ffs <=  '1' when opcode = "1001" or opcode = "1101" else
+                        '0';
+
+    wr_reg_en <= '1' when (estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1001" and opcode /= "1101" and opcode(2 downto 1) /= "11" and opcode /= "1000") or (estado_s = "100" and opcode = "0110") else
                 '0';
 
     wr_ram_en <= '1' when estado_s = "011" and opcode = "0111" else
                 '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" or opcode = "0111" or opcode = "0110" else -- Soma
-                "01" when opcode = "0001" or opcode = "0101" or opcode = "1000" or opcode = "1001" else -- Subtração
+                "01" when opcode = "0001" or opcode = "0101" or opcode = "1000" or opcode = "1001" or opcode = "1101" else -- Subtração
                 "10" when opcode = "0010" else -- E lógico
                 "11" when opcode = "0011" else -- Ou lógico
                 "00";
@@ -101,9 +104,7 @@ begin
     pc_relativo <=  '0' when opcode(3 downto 2) = "11" else
                     '1';
 
-    new_address <=  instrucao(6 downto 0) when opcode(1 downto 0) = "11" else
-                    instrucao(9) & "000" & instrucao(8 downto 6) when instrucao(9) = '0' else
-                    instrucao(9) & "111" & instrucao(8 downto 6);
+    new_address <=  instrucao(6 downto 0);
 
 
 
