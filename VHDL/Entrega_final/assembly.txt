@@ -1,0 +1,23 @@
+-- Carrega constantes que vao ser escritas na RAM
+0: LI R0, 3
+1: LI R1, 10
+2: LI R2, 16
+3: LI R3, 17
+4: LI R4, -1
+5: LI R5, 1
+6: LI R6, -4
+7: LI R7, 4
+-- Escreve constantes na RAM
+8: SW R0, 0(R1) 
+9: SW R2, 2(R3) 
+10: SW R4, 0(R5) 
+11: SW R6, -1(R7) 
+12: SW R4, 0(R2) 
+-- Lê os valores da RAM
+13: LW R6, 0(R1)
+14: LW R4, 2(R3)
+15: LW R2, 0(R5)
+16: NOP
+17: LW R0, -1(R7)
+18: LW R6, 6(R1)
+
