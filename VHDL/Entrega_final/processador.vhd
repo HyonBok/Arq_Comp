@@ -34,12 +34,12 @@ architecture a_processador of processador is
     );  
     end component;
 
-    component ula is 
-        port(   a0, a1:  in  unsigned(15 downto 0); -- Entradas
-                selec:  in  unsigned(1 downto 0);
-                resultado:  out  unsigned(15 downto 0);
-                z, n, v: out std_logic
-        );
+    component ula is
+    port(   a0, a1, carry_flag:  in  unsigned(15 downto 0); -- Entradas
+            selec:  in  unsigned(1 downto 0);
+            resultado:  out  unsigned(15 downto 0);
+            z, n, v, carry_subb: out std_logic
+    );
     end component;
 
     component flip_flop is 
@@ -74,7 +74,7 @@ architecture a_processador of processador is
 
     
     signal pc_en_s, fetch_en_s, wr_reg_en, jmp_en_s, mux_ula_s, z_atual, z_saved, n, v_atual, v_saved, pc_relativo_s, branch_en_s, sel_mux_regs, wr_ram_en : std_logic;
-    signal wr_en_flags : std_logic;
+    signal wr_en_flags, cf_atual, cf_saved : std_logic;
     signal saida_pc, new_address, entrada_ram : unsigned(6 downto 0);
     signal saida_rom, instrucao : unsigned(13 downto 0);
     signal reg1, reg2, entrada_ula2, saida_ula, entrada_data_wr, const_s, saida_ram: unsigned(15 downto 0);
@@ -126,11 +126,13 @@ begin
     ula1 : ula port map(
         a0=>reg1, 
         a1=>entrada_ula2, 
+        carry_flag=>cf_saved,
         selec=>sel_op_ula, 
         resultado=>saida_ula, 
         z=>z_atual, 
         n=>n,
-        v=>v_atual
+        v=>v_atual,
+        carry_subb=>cf_atual
     );
     z_ff : flip_flop port map(
         clk=>clk,
@@ -144,6 +146,13 @@ begin
         reset=>reset,
         data_in=>v_atual,
         data_out=>v_saved,
+        wr_en=>wr_en_flags
+    );
+    carry_flag_ff : flip_flop port map(
+        clk=>clk,
+        reset=>reset,
+        data_in=>cf_atual,
+        data_out=>cf_saved,
         wr_en=>wr_en_flags
     );
     banco : banco_reg port map(

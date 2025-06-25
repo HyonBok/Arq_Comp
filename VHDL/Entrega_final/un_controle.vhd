@@ -58,7 +58,7 @@ begin
     fetch_en <= '1' when estado_s = "001" else
                 '0';
 
-    wr_en_flags_ffs <=  '1' when opcode = "1001" else
+    wr_en_flags_ffs <=  '1' when opcode = "1001" or opcode="0000" else
                         '0';
 
     wr_reg_en <= '1' when (estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1001"  and opcode(2 downto 1) /= "11" and opcode /= "1000" and opcode /= "1010") or (estado_s = "100" and opcode = "0110") else

@@ -4,19 +4,22 @@ use IEEE.numeric_std.all;
 
 entity ula is
     port(
-        a0, a1:  in  unsigned(15 downto 0); -- Entradas
+        a0, a1, carry_flag:  in  unsigned(15 downto 0); -- Entradas
         selec:  in  unsigned(1 downto 0);
         resultado:  out  unsigned(15 downto 0);
-        z, n, v: out std_logic
+        z, n, v, carry_subb: out std_logic
     );
 end entity;
 
 architecture a_ula of ula is
-    signal soma, subt, op_e, op_ou, result: unsigned(15 downto 0);
+    signal soma, subt, cf, op_e, op_ou, result: unsigned(15 downto 0);
 
 begin
+    cf(15 downto 1) <= "000000000000000" 
+    cf(0) <= carry_flag
+
     soma <= a0 + a1;
-    subt <= a0 - a1;
+    subt <= a0 - a1 - cf;
     op_e <= a0 and a1;
     op_ou <= a0 or a1;
 
@@ -42,6 +45,13 @@ begin
                     (a0(15) = '1' and a1(15) = '0' and result(15) = '0' and selec = "01") else
         '0';   
 
+    -- positivo - negativo = negativo
+    -- negativo - positivo = positivo
+    carry_subb <= '1' when  (a0(15) = '0' and a1(15) = '1' and result(15) = '1' and selec = "01") or
+                            (a0(15) = '1' and a1(15) = '0' and result(15) = '0' and selec = "01") else
+        '0';
+
+    
 end architecture;
 
 
