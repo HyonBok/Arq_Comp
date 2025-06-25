@@ -22,7 +22,7 @@ architecture a_banco_reg of banco_reg is
     signal entrada : unsigned(15 downto 0);
 
 begin
-    reg0 = "0000000000000000";
+    reg0 <= "0000000000000000";
     reg1: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en1, data_in=>entrada, data_out=>out_reg1);
     reg2: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en2, data_in=>entrada, data_out=>out_reg2);
     reg3: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en3, data_in=>entrada, data_out=>out_reg3);

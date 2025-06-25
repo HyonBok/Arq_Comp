@@ -35,8 +35,9 @@ architecture a_processador of processador is
     end component;
 
     component ula is
-    port(   a0, a1, carry_flag:  in  unsigned(15 downto 0); -- Entradas
+    port(   a0, a1:  in  unsigned(15 downto 0); -- Entradas
             selec:  in  unsigned(1 downto 0);
+            carry_flag: in std_logic;
             resultado:  out  unsigned(15 downto 0);
             z, n, v, carry_subb: out std_logic
     );
