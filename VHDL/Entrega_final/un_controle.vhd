@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity un_controle is 
     port(   clk, reset, branch_en: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, wr_en_flags_ffs : out std_logic;
+            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, wr_en_flags_ffs, exception : out std_logic;
             sel_op_ula, sel_mux_regs: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(2 downto 0);
@@ -26,6 +26,7 @@ architecture a_un_controle of un_controle is
     signal estado_s : unsigned(2 downto 0);
     signal opcode : unsigned(3 downto 0);
     signal nop : std_logic;
+    signal exc : std_logic;
 
 begin
     maq_estado : state_machine port map(
@@ -37,8 +38,16 @@ begin
     nop <= '1' when instrucao(13 downto 6) = "00000000" else
            '0';
 
+    -- Execeção
+    exc <= '1' when   instrucao(13 downto 10) = "1011" or 
+                            instrucao(13 downto 10) = "1101" or 
+                            instrucao(13 downto 10) = "1110" else
+                '0';
+
+    exception <= exc;
+
     -- Estado 4 - PC (Ultimo estado)
-    pc_en <= '1' when estado_s = "100" else
+    pc_en <= '1' when estado_s = "100" and exc = '0' else
                 '0';
 
     -- Estado 1 - Fetch (Estado 0 é descartado para garantia de integridade)
@@ -52,11 +61,11 @@ begin
     -- Estado 2 - Banco de Registradores
     -- Não é ativado caso seja uma instrução de salto (1111 - JMP, 1000 - BNE, 1010 - BVC), CMPR ou escrita na RAM (0111 - SW) e obviamente, caso seja NOP (0000_0000)
     -- Tem a exceção no LW, para carregar constante da RAM no banco
-    wr_reg_en <= '1' when ((estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1001"  and opcode(2 downto 1) /= "11" and opcode /= "1000" and opcode /= "1010") or (estado_s = "100" and opcode = "0110")) and nop = '0' else
+    wr_reg_en <= '1' when ((estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1001"  and opcode(2 downto 1) /= "11" and opcode /= "1000" and opcode /= "1010") or (estado_s = "100" and opcode = "0110")) and nop = '0' and exc = '0' else
                 '0';
 
     -- Estado 3 - RAM (Faz a escrita caso seja um SW - 0111)
-    wr_ram_en <= '1' when estado_s = "011" and opcode = "0111" and nop = '0' else
+    wr_ram_en <= '1' when estado_s = "011" and opcode = "0111" and nop = '0' and exc = '0' else
                 '0';
 
     -- Seleciona operaçao da ULA
@@ -109,7 +118,6 @@ begin
 
     -- Novo endereço do PC em caso de JMP
     new_address <=  instrucao(6 downto 0);
-
 
 
 end architecture;
