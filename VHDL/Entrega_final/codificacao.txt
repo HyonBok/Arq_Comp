@@ -3,7 +3,7 @@ MSB   b15               b0 LSB
         |               |
 ADD:    0000 dddx sss rrr
 MOV:    0000 dddx 000 sss
-SUB:    0001 dddx sss rrr
+SUBB:   0001 dddx sss rrr
 AND:    0010 dddx sss rrr
 OR:     0011 dddx sss rrr
 ADDI:   0100 dddm sss ccc
@@ -15,6 +15,22 @@ LI:     1100 ddd mbbbbbb
 JMP:    1111 xxx aaaaaaa
 BNE:    1000 xxx mbbbbbb
 BVC:    1010 xxx mbbbbbb
+
+ADD:    0000 ddd rrr xxxx
+SUBB:   0001 ddd rrr xxxx
+AND:    0010 ddd rrr xxxx
+OR:     0011 ddd rrr xxxx
+CMPR:   1001 sss rrr xxxx
+ADDI:   0100 ddd sss mccc
+SUBI:   0101 ddd sss mccc
+MOV:    0100 ddd sss 0000
+LW:     0110 ddd eee mccc
+SW:     0111 rrr eee mccc
+LI:     1100 ddd bbbbbbb
+JMP:    1111 xxx aaaaaaa
+BNE:    1000 xxx mbbbbbb
+BVC:    1010 xxx mbbbbbb
+
 
 onde:
 opcode  = primeiros 4 bits

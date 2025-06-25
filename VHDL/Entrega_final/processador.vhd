@@ -175,10 +175,13 @@ begin
         dado_out=>saida_ram
     );
 
-    sel_reg_wr <= instrucao(9 downto 7) when sel_mux_regs = "00" or sel_mux_regs = "01" else
-                  instrucao(2 downto 0);
-    sel_reg1 <= instrucao(5 downto 3);
-    sel_reg2 <= instrucao(2 downto 0);
+    sel_reg_wr <= instrucao(9 downto 7);
+
+    sel_reg1 <= instrucao(6 downto 4) when mux_ula_s = '1' else
+                instrucao(9 downto 7);
+
+    sel_reg2 <= instrucao(9 downto 7) when wr_ram_en = '1' else
+                instrucao(6 downto 4);
 
     entrada_data_wr <= saida_ula when sel_mux_regs = "00" else
                         "0000000000" & instrucao(5 downto 0) when sel_mux_regs = "01" and instrucao(6) = '0' else

@@ -81,9 +81,9 @@ begin
     mux_ula <= '1' when opcode(2) = '1' else
                 '0';
 
-    const_i(15) <= instrucao(6);
+    const_i(15) <= instrucao(3);
     const_i(2 downto 0) <= instrucao(2 downto 0);
-    const_i(14 downto 3) <= "111111111111" when instrucao(6) = '1' else
+    const_i(14 downto 3) <= "111111111111" when instrucao(3) = '1' else
                             "000000000000";
 
     const_7bits(15) <= instrucao(6);
@@ -91,14 +91,8 @@ begin
     const_7bits(14 downto 6) <= "111111111" when instrucao(6) = '1' else
                                 "000000000";
 
-    const_ram(15) <= instrucao(9);
-    const_ram(2 downto 0) <= instrucao(8 downto 6);
-    const_ram(14 downto 3) <= "111111111111" when instrucao(9) = '1' else
-                              "000000000000";
-
     const <=    const_7bits when opcode(3) = '1' else 
-                const_i when opcode(1) = '0' else
-                const_ram;
+                const_i;
 
     estado <= estado_s;
 
