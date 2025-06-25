@@ -18,11 +18,11 @@ architecture a_banco_reg of banco_reg is
         );
     end component;
     signal wr_en0, wr_en1, wr_en2, wr_en3, wr_en4, wr_en5, wr_en6, wr_en7 : std_logic;
-    signal out_reg0, out_reg1, out_reg2, out_reg3, out_reg4, out_reg5, out_reg6, out_reg7 : unsigned(15 downto 0);
+    signal reg0, out_reg1, out_reg2, out_reg3, out_reg4, out_reg5, out_reg6, out_reg7 : unsigned(15 downto 0);
     signal entrada : unsigned(15 downto 0);
 
 begin
-    reg0: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en0, data_in=>entrada, data_out=>out_reg0);
+    reg0 = "0000000000000000";
     reg1: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en1, data_in=>entrada, data_out=>out_reg1);
     reg2: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en2, data_in=>entrada, data_out=>out_reg2);
     reg3: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en3, data_in=>entrada, data_out=>out_reg3);
@@ -32,7 +32,6 @@ begin
     reg7: reg16bits port map(clk=>clk, reset=>reset, wr_en=>wr_en7, data_in=>entrada, data_out=>out_reg7);
 
     entrada <= data_wr;
-    wr_en0 <= '1' when reg_wr="000" and wr_en='1' else '0';
     wr_en1 <= '1' when reg_wr="001" and wr_en='1' else '0';
     wr_en2 <= '1' when reg_wr="010" and wr_en='1' else '0';
     wr_en3 <= '1' when reg_wr="011" and wr_en='1' else '0';
@@ -42,7 +41,7 @@ begin
     wr_en7 <= '1' when reg_wr="111" and wr_en='1' else '0';
 
 
-    data_r1 <=  out_reg0 when reg_r1="000" else
+    data_r1 <=  reg0 when reg_r1="000" else
                 out_reg1 when reg_r1="001" else
                 out_reg2 when reg_r1="010" else
                 out_reg3 when reg_r1="011" else
@@ -52,7 +51,7 @@ begin
                 out_reg7 when reg_r1="111" else
                 "0000000000000000";
 
-    data_r2 <=  out_reg0 when reg_r2="000" else
+    data_r2 <=  reg0 when reg_r2="000" else
                 out_reg1 when reg_r2="001" else
                 out_reg2 when reg_r2="010" else
                 out_reg3 when reg_r2="011" else

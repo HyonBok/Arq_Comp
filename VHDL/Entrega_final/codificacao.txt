@@ -2,12 +2,13 @@
 MSB   b15               b0 LSB
         |               |
 ADD:    0000 dddx sss rrr
+MOV:    0000 dddx 000 sss
 SUB:    0001 dddx sss rrr
 AND:    0010 dddx sss rrr
 OR:     0011 dddx sss rrr
 ADDI:   0100 dddm sss ccc
 SUBI:   0101 dddm sss ccc
-CMPR:    1001 xxxx sss rrr
+CMPR:   1001 xxxx sss rrr
 LW:     0110 mccc eee ddd
 SW:     0111 mccc eee rrr
 LI:     1100 ddd bbbbbbb
