@@ -58,16 +58,16 @@ begin
     fetch_en <= '1' when estado_s = "001" else
                 '0';
 
-    wr_en_flags_ffs <=  '1' when opcode = "1001" or opcode = "1011" else
+    wr_en_flags_ffs <=  '1' when opcode = "1001" else
                         '0';
 
-    wr_reg_en <= '1' when (estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1001" and opcode /= "1011" and opcode(2 downto 1) /= "11" and opcode /= "1000" and opcode /= "1010") or (estado_s = "100" and opcode = "0110") else
+    wr_reg_en <= '1' when (estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1001"  and opcode(2 downto 1) /= "11" and opcode /= "1000" and opcode /= "1010") or (estado_s = "100" and opcode = "0110") else
                 '0';
 
     wr_ram_en <= '1' when estado_s = "011" and opcode = "0111" else
                 '0';
 
-    sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" or opcode = "0111" or opcode = "0110" or opcode = "1011" else -- Soma
+    sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" or opcode = "0111" or opcode = "0110"  else -- Soma
                 "01" when opcode = "0001" or opcode = "0101" or opcode = "1001" else -- Subtração
                 "10" when opcode = "0010" else -- E lógico
                 "11" when opcode = "0011" else -- Ou lógico
