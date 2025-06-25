@@ -11,7 +11,7 @@ SUBI:   0101 dddm sss ccc
 CMPR:   1001 xxxx sss rrr
 LW:     0110 mccc eee ddd
 SW:     0111 mccc eee rrr
-LI:     1100 ddd bbbbbbb
+LI:     1100 ddd mbbbbbb
 JMP:    1111 xxx aaaaaaa
 BNE:    1000 xxx mbbbbbb
 BVC:    1010 xxx mbbbbbb

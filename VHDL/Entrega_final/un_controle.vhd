@@ -5,8 +5,8 @@ use ieee.numeric_std.all;
 entity un_controle is 
     port(   clk, reset, branch_en: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, sel_mux_regs, wr_en_flags_ffs : out std_logic;
-            sel_op_ula: out unsigned(1 downto 0);
+            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, wr_en_flags_ffs : out std_logic;
+            sel_op_ula, sel_mux_regs: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(2 downto 0);
             new_address: out unsigned(6 downto 0)
@@ -25,7 +25,7 @@ architecture a_un_controle of un_controle is
     signal const_i, const_7bits, const_ram : unsigned(15 downto 0);
     signal estado_s : unsigned(2 downto 0);
     signal opcode : unsigned(3 downto 0);
-    signal nop : unsigned(7 downto 0);
+    signal nop : std_logic;
 
 begin
     maq_estado : state_machine port map(
@@ -50,7 +50,8 @@ begin
 
     opcode <= instrucao(13 downto 10);
 
-    nop <= instrucao(13 downto 6);
+    nop <= '1' when instrucao(13 downto 6) = "00000000" else
+           '0';
 
     pc_en <= '1' when estado_s = "100" else
                 '0';
@@ -61,10 +62,10 @@ begin
     wr_en_flags_ffs <=  '1' when opcode = "1001" or opcode="0000" else
                         '0';
 
-    wr_reg_en <= '1' when (estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1001"  and opcode(2 downto 1) /= "11" and opcode /= "1000" and opcode /= "1010") or (estado_s = "100" and opcode = "0110") else
+    wr_reg_en <= '1' when ((estado_s = "010" and reset = '0' and branch_en = '0' and opcode /= "1001"  and opcode(2 downto 1) /= "11" and opcode /= "1000" and opcode /= "1010") or (estado_s = "100" and opcode = "0110")) and nop = '0' else
                 '0';
 
-    wr_ram_en <= '1' when estado_s = "011" and opcode = "0111" else
+    wr_ram_en <= '1' when estado_s = "011" and opcode = "0111" and nop = '0' else
                 '0';
 
     sel_op_ula <=  "00" when opcode = "0000" or opcode = "0100" or opcode = "0111" or opcode = "0110"  else -- Soma
@@ -73,8 +74,9 @@ begin
                 "11" when opcode = "0011" else -- Ou lógico
                 "00";
 
-    sel_mux_regs <= '1' when opcode = "0110" else
-                    '0';
+    sel_mux_regs <= "11" when opcode = "0110" else
+                    "01" when opcode = "1100" else
+                    "00";
 
     mux_ula <= '1' when opcode(2) = '1' else
                 '0';

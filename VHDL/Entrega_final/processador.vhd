@@ -26,8 +26,8 @@ architecture a_processador of processador is
     component un_controle is 
         port(   clk, reset, branch_en: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, sel_mux_regs, wr_en_flags_ffs : out std_logic;
-            sel_op_ula: out unsigned(1 downto 0);
+            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, wr_en_flags_ffs : out std_logic;
+            sel_op_ula, sel_mux_regs: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(2 downto 0);
             new_address: out unsigned(6 downto 0)
@@ -74,13 +74,13 @@ architecture a_processador of processador is
     end component;
 
     
-    signal pc_en_s, fetch_en_s, wr_reg_en, jmp_en_s, mux_ula_s, z_atual, z_saved, n, v_atual, v_saved, pc_relativo_s, branch_en_s, sel_mux_regs, wr_ram_en : std_logic;
+    signal pc_en_s, fetch_en_s, wr_reg_en, jmp_en_s, mux_ula_s, z_atual, z_saved, n, v_atual, v_saved, pc_relativo_s, branch_en_s, wr_ram_en : std_logic;
     signal wr_en_flags, cf_atual, cf_saved : std_logic;
     signal saida_pc, new_address, entrada_ram : unsigned(6 downto 0);
     signal saida_rom, instrucao : unsigned(13 downto 0);
     signal reg1, reg2, entrada_ula2, saida_ula, entrada_data_wr, const_s, saida_ram: unsigned(15 downto 0);
     signal sel_reg1, sel_reg2, sel_reg_wr : unsigned(2 downto 0);
-    signal sel_op_ula : unsigned(1 downto 0);
+    signal sel_op_ula, sel_mux_regs : unsigned(1 downto 0);
 
     signal estado: unsigned(2 downto 0);
 
@@ -175,12 +175,14 @@ begin
         dado_out=>saida_ram
     );
 
-    sel_reg_wr <= instrucao(9 downto 7) when sel_mux_regs = '0' else
+    sel_reg_wr <= instrucao(9 downto 7) when sel_mux_regs = "00" or sel_mux_regs = "01" else
                   instrucao(2 downto 0);
     sel_reg1 <= instrucao(5 downto 3);
     sel_reg2 <= instrucao(2 downto 0);
 
-    entrada_data_wr <= saida_ula when sel_mux_regs = '0' else
+    entrada_data_wr <= saida_ula when sel_mux_regs = "00" else
+                        "0000000000" & instrucao(5 downto 0) when sel_mux_regs = "01" and instrucao(6) = '0' else
+                        "1111111111" & instrucao(5 downto 0) when sel_mux_regs = "01" and instrucao(6) = '1' else
                         saida_ram;
 
     entrada_ram <= saida_ula(6 downto 0);
