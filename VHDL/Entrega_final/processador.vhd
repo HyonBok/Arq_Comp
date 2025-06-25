@@ -175,11 +175,17 @@ begin
         dado_out=>saida_ram
     );
 
+    -- Seleção dos registradores
+    -- reg_wr é o registrador de destino. Caso o opcode seja um LW, pega o registrador do 2 ao 0.
     sel_reg_wr <= instrucao(9 downto 7) when sel_mux_regs = "00" or sel_mux_regs = "01" else
                   instrucao(2 downto 0);
     sel_reg1 <= instrucao(5 downto 3);
     sel_reg2 <= instrucao(2 downto 0);
 
+    -- Valor de entrada do banco de registradores.
+    -- sel_mux_regs = "00" -> ULA
+    -- sel_mux_regs = "01" -> Constante direta no caso de LI
+    -- sel_mux_regs = "11" -> RAM
     entrada_data_wr <= saida_ula when sel_mux_regs = "00" else
                         "0000000000" & instrucao(5 downto 0) when sel_mux_regs = "01" and instrucao(6) = '0' else
                         "1111111111" & instrucao(5 downto 0) when sel_mux_regs = "01" and instrucao(6) = '1' else

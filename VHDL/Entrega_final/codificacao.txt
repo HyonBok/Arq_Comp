@@ -15,6 +15,7 @@ LI:     1100 ddd mbbbbbb
 JMP:    1111 xxx aaaaaaa
 BNE:    1000 xxx mbbbbbb
 BVC:    1010 xxx mbbbbbb
+NOP:    0000 0000 xxxxxx
 
 onde:
 opcode  = primeiros 4 bits
