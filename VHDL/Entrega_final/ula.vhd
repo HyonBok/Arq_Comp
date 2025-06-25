@@ -38,8 +38,8 @@ begin
     -- negativo - positivo = positivo
     v <= '1' when (a0(15) = '0' and a1(15) = '0' and result(15) = '1' and selec = "00") or
                     (a0(15) = '1' and a1(15) = '1' and result(15) = '0' and selec = "00") or
-                    (a0(15) = '1' and a1(15) = '0' and result(15) = '1' and selec = "01") or
-                    (a0(15) = '0' and a1(15) = '1' and result(15) = '0' and selec = "01") else
+                    (a0(15) = '0' and a1(15) = '1' and result(15) = '1' and selec = "01") or
+                    (a0(15) = '1' and a1(15) = '0' and result(15) = '0' and selec = "01") else
         '0';   
 
 end architecture;
