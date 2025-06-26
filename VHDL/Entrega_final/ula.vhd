@@ -46,13 +46,9 @@ begin
                     (a0(15) = '1' and a1(15) = '0' and result(15) = '0' and selec = "01") else
         '0';   
 
-    -- positivo - negativo = negativo
-    -- negativo - positivo = positivo
-    carry_subb <= '1' when  (a0(15) = '0' and a1(15) = '1' and result(15) = '1' and selec = "01") or
-                            (a0(15) = '1' and a1(15) = '0' and result(15) = '0' and selec = "01") else
-        '0';
-
-    
+    carry_subb <= '0' when a1<=a0 and selec = "01" else
+                  '1';
+        
 end architecture;
 
 

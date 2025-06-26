@@ -26,7 +26,7 @@ architecture a_processador of processador is
     component un_controle is 
         port(   clk, reset, branch_en: in std_logic;
             instrucao : in unsigned(13 downto 0);
-            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, wr_en_flags_ffs : out std_logic;
+            pc_en, fetch_en, wr_reg_en, mux_ula, pc_relativo, wr_ram_en, wr_en_flags_ffs, exception : out std_logic;
             sel_op_ula, sel_mux_regs: out unsigned(1 downto 0);
             const: out unsigned(15 downto 0);
             estado: out unsigned(2 downto 0);
@@ -75,7 +75,7 @@ architecture a_processador of processador is
 
     
     signal pc_en_s, fetch_en_s, wr_reg_en, jmp_en_s, mux_ula_s, z_atual, z_saved, n, v_atual, v_saved, pc_relativo_s, branch_en_s, wr_ram_en : std_logic;
-    signal wr_en_flags, cf_atual, cf_saved : std_logic;
+    signal wr_en_flags, cf_atual, cf_saved, exception : std_logic;
     signal saida_pc, new_address, entrada_ram : unsigned(6 downto 0);
     signal saida_rom, instrucao : unsigned(13 downto 0);
     signal reg1, reg2, entrada_ula2, saida_ula, entrada_data_wr, const_s, saida_ram: unsigned(15 downto 0);
@@ -116,7 +116,8 @@ begin
         branch_en=>branch_en_s,
         wr_ram_en=>wr_ram_en,
         sel_mux_regs=>sel_mux_regs,
-        wr_en_flags_ffs=>wr_en_flags
+        wr_en_flags_ffs=>wr_en_flags,
+        exception=>exception
     );
     fetch: reg14bits port map(
         clk=> clk, reset=>reset, 

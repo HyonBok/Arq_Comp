@@ -1,23 +1,76 @@
--- Carrega constantes que vao ser escritas na RAM
-0: LI R0, 3
-1: LI R1, 10
-2: LI R2, 16
-3: LI R3, 17
-4: LI R4, -1
-5: LI R5, 1
-6: LI R6, -4
-7: LI R7, 4
--- Escreve constantes na RAM
-8: SW R0, 0(R1) 
-9: SW R2, 2(R3) 
-10: SW R4, 0(R5) 
-11: SW R6, -1(R7) 
-12: SW R4, 0(R2) 
--- Lê os valores da RAM
-13: LW R6, 0(R1)
-14: LW R4, 2(R3)
-15: LW R2, 0(R5)
-16: NOP
-17: LW R0, -1(R7)
-18: LW R6, 6(R1)
+
+0: LI R1, 1 
+1: LI R2, 0
+2: LI R3, 15
+3: LI R4, 0
+4: LI R5, 0
+5: LI R6, 0
+6: LI R7, 63
+
+-- Carrega o "complemento" de 63 no R5 para fazer o BVC (estoura para 64 ou mais)
+7: ADDI R4, R0, -1
+8: ADDI R1, R1, 1
+9: ADD R4, R4
+10: CMPR R1,R3
+11: BNE -3
+12: ADD R7, R4
+13: ADD R5, R7
+14: NOP // Antes tinha outra coisa, então para não deixar vazio, colocamos NOP
+15: ADD R5, R4
+
+-- Loop adicionando todos como primos do 2 ao 32
+16: ADDI R2, R0, 1
+17: ADDI R2, R2, 1
+18: SW R1, R2, 0
+19: CMPR R5, R2
+20: BVC -3
+
+-- 0 para zerar os valores na RAM (Poderia ter usado o R0 que é sempre 0, mas acabamos escolhendo R1 na hora)
+21: LI R1, 0
+
+-- Loop principal
+-- Loop i (R2) iniciando em 2 e carrega R3 = 8 (Raiz mais proxima de 64) para comparar
+22: LI R2, 2
+23: LI R3, 8
+-- Enquanto i (R2) != 6 (R3), pula a instrução de JMP (como se fosse um if)
+24: CMPR R3, R2
+25: BNE 2
+26: JMP 39
+-- Compara se o endereco i (R2) da ram é primo (!= 0) carregando valor no R4. (Novamente, como se fosse um if)
+27: LW R4, R2, 0
+28: CMPR R4, R0
+29: BNE 2
+30: JMP 36
+-- Loop j (R6) iniciando com valor de 2 * i e somando i a cada iteração
+31: MOV R6, R2
+32: ADD R6, R2
+33: SW R1, R6, 0
+34: CMPR R5, R6
+35: BVC -3
+-- i++ (R2)
+36: ADDI R2, R2, 1
+-- Zera o j (R6)
+37: CLR R6
+38: JMP 24
+
+-- Loop para pegar os primos
+-- Carrega o i (R2) com 2 e zera R7 (Onde ficará os primos)
+39: LI R2, 2
+40: CLR R7
+-- Compara se o endereco i (R2) da ram é primo (!= 0) carregando no R4, se for, carrega o número i (R2) no R7
+41: LW R4, R2, 0
+42: CMPR R4, R0
+43: BNE 2
+44: JMP 46
+45: MOV R7, R2
+-- i++ (R2)
+46: ADDI R2, R2, 1
+-- Enquanto i (R2) < 32 (R5) Continua, caso contrário pula para o final
+47: CMPR R5, R2
+48: BVC -7
+
+-- Nop (Ponto final)
+49: NOP
+
+
 

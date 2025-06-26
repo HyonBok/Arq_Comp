@@ -1,35 +1,21 @@
 (Instruções ortogonais)
 MSB   b15               b0 LSB
         |               |
-ADD:    0000 dddx sss rrr
-MOV:    0000 dddx 000 sss
-SUBB:   0001 dddx sss rrr
-AND:    0010 dddx sss rrr
-OR:     0011 dddx sss rrr
-ADDI:   0100 dddm sss ccc
-SUBI:   0101 dddm sss ccc
-CMPR:   1001 xxxx sss rrr
-LW:     0110 mccc eee ddd
-SW:     0111 mccc eee rrr
-LI:     1100 ddd mbbbbbb
-JMP:    1111 xxx aaaaaaa
-BNE:    1000 xxx mbbbbbb
-BVC:    1010 xxx mbbbbbb
-
 ADD:    0000 ddd rrr xxxx
 SUBB:   0001 ddd rrr xxxx
 AND:    0010 ddd rrr xxxx
 OR:     0011 ddd rrr xxxx
 CMPR:   1001 sss rrr xxxx
-ADDI:   0100 ddd sss mccc
-SUBI:   0101 ddd sss mccc
+ADDI:   0100 ddd sss cccc
+SUBI:   0101 ddd sss cccc
 MOV:    0100 ddd sss 0000
-LW:     0110 ddd eee mccc
-SW:     0111 rrr eee mccc
-LI:     1100 ddd bbbbbbb
+CLR:    0100 ddd 000 0000
+LW:     0110 ddd eee cccc
+SW:     0111 rrr eee cccc
+LI:     1100 ddd bbbbbbb        (Carrega constante 7 bits)
 JMP:    1111 xxx aaaaaaa
-BNE:    1000 xxx mbbbbbb
-BVC:    1010 xxx mbbbbbb
+BNE:    1000 xxx bbbbbbb
+BVC:    1010 xxx bbbbbbb
 
 
 onde:
@@ -41,5 +27,4 @@ eee     = identifica o registrador de endereço RAM
 cccc    = identifica a constante de 4 bits em complemento de 2
 bbbbbbb = identifica a constante de 7 bits em complemento de 2 à ser carregada
 aaaaaaa = identifica o endereco de 7 bits para salto
-m       = bit mais significativo (complemento de 2) da constante c
 x       = é irrelevante
